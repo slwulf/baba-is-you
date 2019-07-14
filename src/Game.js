@@ -1,4 +1,5 @@
 import History from './History.js'
+import Renderer from './Renderer.js'
 import Util from './Util.js'
 import Blocks from './Blocks'
 
@@ -6,6 +7,7 @@ export default class Game {
   constructor(levels = [''], legend = {}) {
     this.legend = legend
     this.levels = levels
+    this.renderer = new Renderer()
     this.state = {
       history: History.of(
         Util.sanitizeMapString(levels[0])
@@ -97,6 +99,18 @@ export default class Game {
 
   getCurrentLevel() {
     return this.levels[this.currentLevel]
+  }
+
+  render() {
+    this.renderer.gridOpen()
+    this.state.currentGrid.forEach(row => {
+      this.renderer.lineOpen()
+      row.forEach(block => {
+        this.renderer.renderBlock(block)
+      })
+      this.renderer.lineClose()
+    })
+    this.renderer.gridClose()
   }
 }
 

@@ -1,6 +1,7 @@
 # Baba Is You
 
 #### TODO
+- debug Rule.fromArray downsampling (throws an error occasionally, see two babas setup rn)
 - don't throw an error when colliding with map boundary
 - make pushable objects move when pushed (incl chain reaction push)
 
