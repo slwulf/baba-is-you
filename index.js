@@ -5,17 +5,22 @@ import RenderingEngine from './src/Renderer/Engines/DOMString'
 // level title or whitespace
 var game = new Game([
   `
-  __________
-  _BsU______
-  _____b____
-  b_________
-  __________
+  BsU__________________RsP
+  ________________________
+  ___________b____________
+  _____r_r________________
+  ________________________
+  ________r___r___________
+  ________________________
   `
 ], {
   '_': Game.Blocks.BLANK,
   'b': Game.Blocks.ICONS.Baba,
+  'r': Game.Blocks.ICONS.Rock,
   'B': Game.Blocks.NOUNS.Baba,
+  'R': Game.Blocks.NOUNS.Rock,
   's': Game.Blocks.JOINERS.Is,
+  'P': Game.Blocks.PROPERTIES.Push,
   'U': Game.Blocks.PROPERTIES.You
 },
 new RenderingEngine())

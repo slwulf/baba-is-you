@@ -8,5 +8,6 @@ class NounBase extends BlockBase {
 }
 
 class Baba extends NounBase {}
+class Rock extends NounBase {}
 
-export default {Baba}
+export default {Baba, Rock}
