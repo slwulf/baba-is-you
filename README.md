@@ -1,7 +1,6 @@
 # Baba Is You
 
 #### TODO
-- don't throw an error when colliding with map boundary
 - make pushable objects move when pushed (incl chain reaction push)
 - debug Renderer (keeps appending string to DOM rather than clearing first)
 
