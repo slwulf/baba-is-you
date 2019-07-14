@@ -1,21 +1,20 @@
 import Util from './Util.js'
 
 export default function History() {
-  const initialState = ''
   const commits = []
   let blocksCoveredByMovedIcons = []
 
   return {
     push(change) {
-      // if (typeof change === 'string' && commits.length > 0) {
-      //   throw new Error('Cannot push string onto initialized history.')
-      // }
-
-      // if (typeof change !== 'function' && commits.length > 0) {
-      //   throw new Error('History transormation must be of type function.')
-      // }
-
       commits.push(change)
+    },
+
+    revert(count = -1) {
+      if (count < 0) {
+        commits.splice(1, commits.length)
+      } else if (commits.length > count) {
+        commits.splice(commits.length - count)
+      }
     },
 
     applyChanges(diff) {

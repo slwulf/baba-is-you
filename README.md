@@ -1,7 +1,9 @@
 # Baba Is You
 
 #### TODO
-- make pushable objects move when pushed (incl chain reaction push)
+- debug pushable objects disappearing
+  - when pushing multiple objects at once
+  - when approaching map border with a single object
 - debug Renderer (keeps appending string to DOM rather than clearing first)
 
 ## Game Objects

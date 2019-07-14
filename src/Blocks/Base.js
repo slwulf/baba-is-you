@@ -27,10 +27,6 @@ export default class Base {
     this.type = type
   }
 
-  canBePlayer() {
-    return this.isIcon()
-  }
-
   isSolid() {
     return this.isWord() || this.properties.some(p => p.hasEffect(EFFECTS.SOLID))
   }
@@ -39,6 +35,10 @@ export default class Base {
     return this.isWord() || this.properties.some(
       p => p.hasEffect(EFFECTS.SOLID) && p.hasEffect(EFFECTS.MOVABLE)
     )
+  }
+
+  isSteppable() {
+    return this.isBlank() || !this.isSolid()
   }
 
   isYou() {

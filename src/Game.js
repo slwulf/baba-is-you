@@ -17,6 +17,14 @@ export default class Game {
     }
   }
 
+  undo() {
+    this.state.history.revert(1)
+  }
+
+  reset() {
+    this.state.history.revert()
+  }
+
   updateState(input = '') {
     this.applyProperties(
       this.determineRules()
@@ -35,31 +43,63 @@ export default class Game {
   }
 
   determineRules() {
-    var map = this.state.history.last
     var grid = this.state.currentGrid
     // TODO: implement getRulesFromCols
     return [].concat(Util.getRulesFromRows(grid)).concat(Util.getRulesFromCols(grid))
   }
 
   determineLegalMoves(input) {
-    var playerIcons = this.getPlayerIcons()
-    return playerIcons.map(icon => {
+    var queue = []
+    var playerMoves = this.getPlayerIcons().map(icon => {
       var to = Util.getNextPosition(icon.position, input)
-      /**
-       * Move is legal if:
-       * - to space _exists_
-       * - to space is blank
-       * - to space is not solid
-       * - to space is solid but can be pushed
-       */
       var nextBlock = this.getBlockAtPosition(to)
-      if (
-        nextBlock &&
-        (nextBlock.isBlank() || !nextBlock.isSolid())
-      ) {
-        return {to, from: icon.position}
+      var move = {to, from: icon.position}
+
+      // can't move to a nonexistant block
+      if (!nextBlock) return false
+
+      // can move to a steppable (blank or not solid) block
+      if (nextBlock.isSteppable()) return move
+
+      // queue to determine if can move to movable block
+      if (nextBlock.isMovable()) {
+        queue.push(move)
+        queue.push({
+          from: move.to,
+          to: Util.getNextPosition(move.to, input)
+        })
       }
     }).filter(Boolean)
+
+    return playerMoves
+      .concat(this.processQueuedMoves(queue, input))
+      // play queued moves in reverse so the end result
+      // is the player's movement -- this avoids the player
+      // stepping on a movable object and erasing it instead
+      // of actually moving it
+      .reverse()
+  }
+
+  processQueuedMoves(queue, input) {
+    var requeue = []
+    return queue.map(move => {
+      var nextPos = Util.getNextPosition(move.to, input)
+      var nextBlock = this.getBlockAtPosition(nextPos)
+
+      // same logic as determineLegalMoves
+      if (!nextBlock) return false
+      if (nextBlock.isSteppable()) return move
+      if (nextBlock.isMovable()) {
+        requeue.push({
+          from: move.to,
+          to: nextPos
+        })
+      }
+    }).concat(
+      requeue.length > 0
+        ? this.processQueuedMoves(requeue, input)
+        : []
+    ).filter(Boolean)
   }
 
   applyProperties(rules) {
@@ -90,22 +130,12 @@ export default class Game {
     return row ? row[y] : null
   }
 
-  undo() {
-    console.log('UNDO!')
-    this.state.history.revert(1)
-  }
-
-  reset() {
-    console.log('RESET!')
-    this.state.history = History.of(this.getCurrentLevel())
-  }
-
   getCurrentState() {
     return this.state.history.last
   }
 
   getCurrentLevel() {
-    return this.levels[this.currentLevel]
+    return Util.sanitizeMapString(this.levels[this.state.currentLevel])
   }
 
   render() {
