@@ -35,8 +35,8 @@ Rule.fromArray = function(blocks) {
     if (
       (sample[0].isBlank() && sample[2].isBlank()) ||
       (size === 3 && sample[1].isBlank()) ||
-      (size === 4 && (sample[1].isBlank() || sample[2].isBlank())) ||
-      (size === 5 && (sample[0].isBlank() || sample[2].isBlank()))
+      (size === 4 && (sample[0].isBlank() || sample[1].isBlank() || sample[2].isBlank())) ||
+      (size === 5 && (sample[0].isBlank() || sample[1].isBlank() || sample[2].isBlank()))
     ) continue
 
     var rule = validateRuleGroup(sample)
@@ -56,7 +56,7 @@ function validateRuleGroup(blocks) {
   var four = blocks[3]
   var five = blocks[4]
 
-  if (validateFiveBlocks(...blocks)) {
+  if (validateFiveBlocks(...blocks.filter(Boolean))) {
     return new Rule(one, thr, five)
   }
 
@@ -74,6 +74,7 @@ function validateRuleGroup(blocks) {
 }
 
 function validateFiveBlocks(...blocks) {
+  if (blocks.length < 5) return false
   return [
     b => b.isNoun(),
     b => b.isJoiner() && b.name === 'Is',
