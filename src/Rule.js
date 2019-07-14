@@ -16,10 +16,6 @@ export default class Rule {
 }
 
 Rule.fromArray = function(blocks) {
-  // we have a valid rule IF:
-  // 1. NOUN + IS + NOUN
-  // 2. NOUN + IS + PROP
-  // 3. NOUN + IS + PROP + AND + PROP
   var rules = []
   for (var i = 0; i < blocks.length; i++) {
     var sample = [
@@ -29,22 +25,24 @@ Rule.fromArray = function(blocks) {
       blocks[i+3],
       blocks[i+4]
     ].filter(Boolean)
+    var size = sample.length
 
-    if (sample.length < 3) break
+    // bail if sample size is too small to make a rule
+    if (size < 3) break
 
+    // attempt to cut out samples that are unlikely to produce
+    // a valid rule or may cause duplicate rules
     if (
-      // trying to cut down on samples unlikely to be rule groups
-      // or likely to duplicate valid rules
       (sample[0].isBlank() && sample[2].isBlank()) ||
-      (sample[1].isBlank() && sample[3].isBlank()) ||
-      (sample[0].isBlank() && sample[4].isBlank())
-    ) {
-      continue
-    }
+      (size === 3 && sample[1].isBlank()) ||
+      (size === 4 && (sample[1].isBlank() || sample[2].isBlank())) ||
+      (size === 5 && (sample[0].isBlank() || sample[2].isBlank()))
+    ) continue
 
     var rule = validateRuleGroup(sample)
     if (rule) rules.push(rule)
   }
+
   return rules
 }
 
