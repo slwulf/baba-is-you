@@ -1,4 +1,5 @@
 import Game from './src/Game.js'
+import RenderingEngine from './src/Renderer/Engines/DOMString'
 
 // when parsing levels, first line is assumed to be
 // level title or whitespace
@@ -16,7 +17,8 @@ var game = new Game([
   'B': Game.Blocks.NOUNS.Baba,
   's': Game.Blocks.JOINERS.Is,
   'U': Game.Blocks.PROPERTIES.You
-})
+},
+new RenderingEngine())
 
 document.body.addEventListener('keyup', event => {
   var {key} = event
@@ -30,7 +32,8 @@ document.body.addEventListener('keyup', event => {
   }
 })
 
-requestAnimationFrame(render)
+render()
+// renderWithRenderer()
 
 function render() {
   var $level = document.querySelector('pre')
@@ -42,7 +45,6 @@ function render() {
 }
 
 function renderWithRenderer() {
-  var $level = document.querySelector('pre')
-  game.render($level)
-  requestAnimationFrame(renderWithRenderer)
+  game.render()
+  setTimeout(renderWithRenderer, 500)
 }

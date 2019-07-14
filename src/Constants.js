@@ -7,3 +7,12 @@ export const EFFECTS = {
   WIN: 'win',
   DEFEAT: 'defeat'
 }
+
+export const TYPES = {
+  BASE: 'base',
+  BLANK: 'blank',
+  ICON: 'icon',
+  NOUN: 'noun',
+  JOINER: 'joiner',
+  PROPERTY: 'property'
+}

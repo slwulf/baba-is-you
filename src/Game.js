@@ -1,13 +1,13 @@
 import History from './History.js'
-import Renderer from './Renderer.js'
 import Util from './Util.js'
 import Blocks from './Blocks'
+import Renderer from './Renderer'
 
 export default class Game {
-  constructor(levels = [''], legend = {}) {
+  constructor(levels = [''], legend = {}, engine) {
     this.legend = legend
     this.levels = levels
-    this.renderer = new Renderer()
+    this.renderer = new Renderer(engine)
     this.state = {
       history: History.of(
         Util.sanitizeMapString(levels[0])
@@ -21,6 +21,8 @@ export default class Game {
     this.applyProperties(
       this.determineRules()
     )
+
+    // TODO: bail early if YOU is not connected
 
     this.state.history.applyChanges(
       this.determineLegalMoves(input)
@@ -111,6 +113,8 @@ export default class Game {
       this.renderer.lineClose()
     })
     this.renderer.gridClose()
+
+    this.renderer.renderFrameSync()
   }
 }
 
