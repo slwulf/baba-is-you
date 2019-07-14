@@ -52,7 +52,7 @@ export default class Game {
        * - to space is not solid
        * - to space is solid but can be pushed
        */
-      var nextBlock = this.state.currentGrid[to.x][to.y]
+      var nextBlock = this.getBlockAtPosition(to)
       if (
         nextBlock &&
         (nextBlock.isBlank() || !nextBlock.isSolid())
@@ -83,6 +83,11 @@ export default class Game {
         return block.isIcon() && block.isYou()
       })
     })
+  }
+
+  getBlockAtPosition({x, y}) {
+    var row = this.state.currentGrid[x]
+    return row ? row[y] : null
   }
 
   undo() {
