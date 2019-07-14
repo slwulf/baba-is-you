@@ -1,8 +1,9 @@
 import BlockBase from '../Base.js'
+import {TYPES} from '../../Constants.js'
 
 class IconBase extends BlockBase {
   initialize() {
-    this.type = BlockBase.TYPES.ICON
+    this.type = TYPES.ICON
   }
 }
 

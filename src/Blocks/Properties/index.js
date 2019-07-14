@@ -1,9 +1,9 @@
 import BlockBase from '../Base.js'
-import {EFFECTS} from '../../Constants.js'
+import {EFFECTS, TYPES} from '../../Constants.js'
 
 class PropertyBase extends BlockBase {
   initialize() {
-    this.type = BlockBase.TYPES.PROPERTY
+    this.type = TYPES.PROPERTY
     this.effects = {}
     this.setEffects()
   }

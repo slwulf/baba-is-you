@@ -4,6 +4,7 @@
 - debug Rule.fromArray downsampling (throws an error occasionally, see two babas setup rn)
 - don't throw an error when colliding with map boundary
 - make pushable objects move when pushed (incl chain reaction push)
+- debug Renderer (keeps appending string to DOM rather than clearing first)
 
 ## Game Objects
 
@@ -18,9 +19,8 @@ All of these take up one grid space of a level. Icons have no collision by defau
 
 1. Nouns combine with Joiners and Properties to affect Icons.
 2. Noun + IS + Property = Icon matching noun has property
-3. Noun + IS + Property + AND + Property = Icons matching noun have any
+3. Noun + IS + Property + AND + Property = Icons matching noun have any properties chained on by any number of ANDs
 4. Noun + IS + Noun = Icons matching noun 1 turn into noun 2
-   properties chained on by any number of ANDs
 5. Icons have no Properties unless a rule is defined by one of the above
    three combinations
 6. Rules can only be defined top to bottom or left to right

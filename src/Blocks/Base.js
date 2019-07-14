@@ -1,4 +1,4 @@
-import {EFFECTS} from '../Constants.js'
+import {EFFECTS, TYPES} from '../Constants.js'
 
 export default class Base {
   get name() {
@@ -12,7 +12,7 @@ export default class Base {
   }
 
   initialize() {
-    this.type = Base.TYPES.BASE
+    this.type = TYPES.BASE
   }
 
   addProperty(property) {
@@ -46,35 +46,26 @@ export default class Base {
   }
 
   isBlank() {
-    return this.type === Base.TYPES.BLANK
+    return this.type === TYPES.BLANK
   }
 
   isIcon() {
-    return this.type === Base.TYPES.ICON
+    return this.type === TYPES.ICON
   }
 
   isNoun() {
-    return this.type === Base.TYPES.NOUN
+    return this.type === TYPES.NOUN
   }
 
   isJoiner() {
-    return this.type === Base.TYPES.JOINER
+    return this.type === TYPES.JOINER
   }
 
   isProperty() {
-    return this.type === Base.TYPES.PROPERTY
+    return this.type === TYPES.PROPERTY
   }
 
   isWord() {
     return this.isNoun() || this.isJoiner() || this.isProperty()
   }
-}
-
-Base.TYPES = {
-  BASE: 'base',
-  BLANK: 'blank',
-  ICON: 'icon',
-  NOUN: 'noun',
-  JOINER: 'joiner',
-  PROPERTY: 'property'
 }
