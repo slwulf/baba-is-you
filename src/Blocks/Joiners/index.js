@@ -7,5 +7,6 @@ class JoinerBase extends BlockBase {
 }
 
 class Is extends JoinerBase {}
+class And extends JoinerBase {}
 
-export default {Is}
+export default {Is, And}

@@ -1,9 +1,9 @@
 import Rule from './Rule.js'
 
 export default {
-  getObjectsForMap(map = '', legend = {}) {
-    return map.trim().split('\n')
-      .map((row, i) => row.trim().split('').map((char, j) => {
+  getObjectsForMap(mapStr = '', legend = {}) {
+    return this.splitMapString(mapStr)
+      .map((row, i) => row.map((char, j) => {
         var Block = legend[char]
         if (typeof Block !== 'function') {
           throw new Error(`Could not find Block constructor in legend for "${char}"`)
@@ -20,13 +20,19 @@ export default {
   getNextPosition({x,y}, input) {
     switch (input) {
       case 'Left':
-        return {x: x-1, y}
-      case 'Right':
-        return {x: x+1, y}
-      case 'Up':
         return {x, y: y-1}
-      case 'Down':
+      case 'Right':
         return {x, y: y+1}
+      case 'Up':
+        return {x: x-1, y}
+      case 'Down':
+        return {x: x+1, y}
     }
+  },
+  sanitizeMapString(mapStr) {
+    return mapStr.trim().replace(/[^\S\r\n]/g, '')
+  },
+  splitMapString(mapStr) {
+    return mapStr.trim().split('\n').map(l => l.trim().split(''))
   }
 }

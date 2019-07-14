@@ -7,7 +7,7 @@ var game = new Game([
   __________
   _BsU______
   __________
-  ____b_____
+  b_________
   __________
   `
 ], {
@@ -34,7 +34,9 @@ requestAnimationFrame(render)
 
 function render() {
   var $level = document.querySelector('pre')
-  // var $title = document.querySelector('em')
-  $level.innerText = game.getCurrentState()
-  // requestAnimationFrame(render)
+  var state = game.getCurrentState()
+  if (state !== $level.innerText) {
+    $level.innerText = game.getCurrentState()
+  }
+  requestAnimationFrame(render)
 }

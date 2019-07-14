@@ -7,37 +7,28 @@ export default class Game {
     this.legend = legend
     this.levels = levels
     this.state = {
-      history: History.of(levels[0]),
+      history: History.of(
+        Util.sanitizeMapString(levels[0])
+      ),
       currentLevel: 0,
       currentGrid: Util.getObjectsForMap(levels[0], legend)
     }
   }
 
   updateState(input = '') {
-    var rules = this.determineRules()
-    var moves = this.determineMoves(rules, input)
-    console.log(moves)
+    this.applyProperties(
+      this.determineRules()
+    )
 
-    // this.state.currentGrid = Util.getObjectsForMap(
-    //   this.state.history.last
-    // )
+    this.state.history.applyChanges(
+      this.determineLegalMoves(input)
+    )
+
+    this.state.currentGrid = Util.getObjectsForMap(
+      this.state.history.last,
+      this.legend
+    )
   }
-
-  // function updateState(state, input) {
-  //   var rules = determineRules(state)
-  //   var moves = determineMoves(state, rules, input)
-  //   var changes = moves.map(move => {
-  //     if (isLegal(move, rules, state)) {
-  //       return getStateChangeDiff(state, move, rules)
-  //     }
-
-  //     return isLegal(move, rules, state)
-  //       ? getStateChangeDiff(state, move, rules)
-  //       : null
-  //   })
-
-  //   return changes.reduce(applyStateChange, state)
-  // }
 
   determineRules() {
     var map = this.state.history.last
@@ -46,27 +37,46 @@ export default class Game {
     return [].concat(Util.getRulesFromRows(grid)).concat(Util.getRulesFromCols(grid))
   }
 
-  determineMoves(rules, input) {
-    var playerIcons = this.getPlayerIcons(rules)
+  determineLegalMoves(input) {
+    var playerIcons = this.getPlayerIcons()
     return playerIcons.map(icon => {
       var to = Util.getNextPosition(icon.position, input)
-      return {to, from: icon.position}
+      /**
+       * Move is legal if:
+       * - to space _exists_
+       * - to space is blank
+       * - to space is not solid
+       * - to space is solid but can be pushed
+       */
+      var nextBlock = this.state.currentGrid[to.x][to.y]
+      if (
+        nextBlock &&
+        (nextBlock.isBlank() || !nextBlock.isSolid())
+      ) {
+        return {to, from: icon.position}
+      }
+    }).filter(Boolean)
+  }
+
+  applyProperties(rules) {
+    rules.forEach(rule => {
+      var icons = this.getIconsForNoun(rule.target)
+      icons.forEach(icon => {
+        rule.properties.forEach(p => icon.addProperty(p))
+      })
     })
   }
 
-  getPlayerIcons(rules) {
-    var playerNouns = rules.map(rule => {
-      return rule.hasProperty(Blocks.PROPERTIES.You.name)
-        ? rule.target.name
-        : null
-    }).filter(Boolean)
+  getIconsForNoun(noun) {
+    return this.state.currentGrid.flatMap(row => {
+      return row.filter(block => block.isIcon() && block.name === noun.name)
+    })
+  }
 
+  getPlayerIcons() {
     return this.state.currentGrid.flatMap(row => {
       return row.filter(block => {
-        return (
-          block.isIcon() &&
-          playerNouns.indexOf(block.name) > -1
-        )
+        return block.isIcon() && block.isYou()
       })
     })
   }

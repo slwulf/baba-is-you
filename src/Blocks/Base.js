@@ -1,12 +1,18 @@
+import {EFFECTS} from '../Constants.js'
+
 export default class Base {
-  constructor(x, y) {
+  get name() {
+    return this.constructor.name
+  }
+
+  constructor(x = -1, y = -1) {
     this.position = {x,y}
+    this.properties = []
     this.initialize()
   }
 
   initialize() {
     this.type = Base.TYPES.BASE
-    this.properties = []
   }
 
   addProperty(property) {
@@ -23,6 +29,20 @@ export default class Base {
 
   canBePlayer() {
     return this.isIcon()
+  }
+
+  isSolid() {
+    return this.isWord() || this.properties.some(p => p.hasEffect(EFFECTS.SOLID))
+  }
+
+  isMovable() {
+    return this.isWord() || this.properties.some(
+      p => p.hasEffect(EFFECTS.SOLID) && p.hasEffect(EFFECTS.MOVABLE)
+    )
+  }
+
+  isYou() {
+    return this.properties.some(p => p.hasEffect(EFFECTS.YOU))
   }
 
   isBlank() {
@@ -45,8 +65,8 @@ export default class Base {
     return this.type === Base.TYPES.PROPERTY
   }
 
-  get name() {
-    return this.constructor.name
+  isWord() {
+    return this.isNoun() || this.isJoiner() || this.isProperty()
   }
 }
 

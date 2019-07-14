@@ -1,12 +1,8 @@
 # Baba Is You
 
 #### TODO
-- build out block objects for baba (icon&noun), is, and you
-- be able to set properties on block instances based on map state
-
-#### Random Notes
-- Rules are the join of Nouns and Properties or Nouns and another Noun
-- Effects are the application of a Rule to an Icon (not necessarily a class, maybe just a method that takes a Rule)
+- don't throw an error when colliding with map boundary
+- make pushable objects move when pushed (incl chain reaction push)
 
 ## Game Objects
 
