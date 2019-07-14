@@ -48,4 +48,4 @@ class Defeat extends PropertyBase {
   }
 }
 
-export default {You}
+export default {You, Stop, Push, Win, Defeat}
