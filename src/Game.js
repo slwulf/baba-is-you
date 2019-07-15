@@ -63,7 +63,7 @@ export default class Game {
         to: Util.getNextPosition(nextBlock.position, input),
         _: nextBlock.name
       }
-      var lastBlockInChain = this.getLastSolidBlockInChain(block, move.to)
+      var lastBlockInChain = this.getLastBlockInChain(block, move.to)
       var blockAfterChain = this.getBlockAtPosition(
         Util.getNextPosition(lastBlockInChain.position, input)
       )
@@ -97,7 +97,7 @@ export default class Game {
     return legalMoves.concat(this.determineLegalMoves(queue, input, depth + 1)).reverse()
   }
 
-  getLastSolidBlockInChain(block, pos) {
+  getLastBlockInChain(block, pos) {
     var nextBlock = this.getBlockAtPosition(pos)
     var direction = Util.getDirectionFromMoveDelta({
       from: block.position,
@@ -105,8 +105,8 @@ export default class Game {
     })
 
     if (!nextBlock) return block
-    if (!nextBlock.isSolid()) return block
-    return this.getLastSolidBlockInChain(
+    if (!nextBlock.isMovable()) return block
+    return this.getLastBlockInChain(
       nextBlock,
       Util.getNextPosition(nextBlock.position, direction)
     )
