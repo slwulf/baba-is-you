@@ -4,6 +4,8 @@
 - debug pushable objects
   - when pushing a chain, player steps between first and second items and ends up pushing second
   - see Game#determineLegalMoves
+- debug player movement
+  - when player steps on a non-movable icon, the icon disappears
 - debug Renderer (keeps appending string to DOM rather than clearing first)
 
 ## Game Objects
