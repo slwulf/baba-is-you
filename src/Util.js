@@ -29,10 +29,24 @@ export default {
         return {x: x+1, y}
     }
   },
+  getDirectionFromMoveDelta(move) {
+    var dX = move.to.x - move.from.x
+    var dY = move.to.y - move.from.y
+
+    return dX === 0
+      ? (dY > 0 ? 'Right' : 'Left')
+      : (dX > 0 ? 'Down' : 'Up')
+  },
   sanitizeMapString(mapStr) {
     return mapStr.trim().replace(/[^\S\r\n]/g, '')
   },
   splitMapString(mapStr) {
     return mapStr.trim().split('\n').map(l => l.trim().split(''))
+  },
+  arrayContainsObject(arr, obj) {
+    var keys = Object.keys(obj)
+    return arr.some(item => {
+      return keys.every(k => obj[k] === item[k])
+    })
   }
 }

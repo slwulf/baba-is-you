@@ -1,9 +1,9 @@
 # Baba Is You
 
 #### TODO
-- debug pushable objects disappearing
-  - when pushing multiple objects at once
-  - when approaching map border with a single object
+- debug pushable objects
+  - when pushing a chain, player steps between first and second items and ends up pushing second
+  - see Game#determineLegalMoves
 - debug Renderer (keeps appending string to DOM rather than clearing first)
 
 ## Game Objects

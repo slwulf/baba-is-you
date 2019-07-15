@@ -33,7 +33,10 @@ export default class Game {
     // TODO: bail early if YOU is not connected
 
     this.state.history.applyChanges(
-      this.determineLegalMoves(input)
+      this.determineLegalMoves(
+        this.getPlayerMoves(input),
+        input
+      )
     )
 
     this.state.currentGrid = Util.getObjectsForMap(
@@ -48,43 +51,105 @@ export default class Game {
     return [].concat(Util.getRulesFromRows(grid)).concat(Util.getRulesFromCols(grid))
   }
 
-  determineLegalMoves(input) {
+  determineLegalMoves(moves, input, depth = 0) {
+    if (moves.length === 0) return moves
     var queue = []
-    var playerMoves = this.getPlayerIcons().map(icon => {
-      var to = Util.getNextPosition(icon.position, input)
-      var nextBlock = this.getBlockAtPosition(to)
-      var move = {to, from: icon.position}
-
-      // can't move to a nonexistant block
-      if (!nextBlock) return false
-
-      // can move to a steppable (blank or not solid) block
-      if (nextBlock.isSteppable()) return move
-
-      // queue to determine if can move to movable block
-      if (nextBlock.isMovable()) {
-        queue.push(move)
-        queue.push({
-          from: move.to,
-          to: Util.getNextPosition(move.to, input)
-        })
+    var legalMoves = moves.map(move => {
+      var block = this.getBlockAtPosition(move.from)
+      var canMove = this.blockCanBeMovedTo(block, move.to)
+      var nextBlock = this.getBlockAtPosition(move.to)
+      var nextMove = !nextBlock ? null : {
+        from: nextBlock.position,
+        to: Util.getNextPosition(nextBlock.position, input),
+        _: nextBlock.name
       }
+      var lastBlockInChain = this.getLastSolidBlockInChain(block, move.to)
+      var blockAfterChain = this.getBlockAtPosition(
+        Util.getNextPosition(lastBlockInChain.position, input)
+      )
+
+      // TODO: solve the bug and then rewrite this mess
+
+      // prevent chain from exceeding map boundaries
+      if (!nextBlock || !blockAfterChain) return false
+      if (!this.blockCanBeMovedTo(lastBlockInChain, blockAfterChain.position)) {
+        return false
+      }
+
+      // this is here for debugging, would love to remove the depth check entirely
+      if (depth > 5) {
+        return this.blockCanBeMovedTo(block, move.to, true)
+          ? move
+          : false
+      }
+
+      // console.log(nextBlock)
+      if (canMove === undefined && nextBlock && nextBlock.isMovable()) {
+        if (!Util.arrayContainsObject(queue, move)) queue.push(move)
+        if (!Util.arrayContainsObject(queue, nextMove)) queue.push(nextMove)
+      }
+      // console.log(queue)
+
+      return canMove ? move : false
     }).filter(Boolean)
 
-    return playerMoves
-      .concat(this.processQueuedMoves(queue, input))
-      // play queued moves in reverse so the end result
-      // is the player's movement -- this avoids the player
-      // stepping on a movable object and erasing it instead
-      // of actually moving it
-      .reverse()
+    if (queue.length - depth > depth) return legalMoves.concat(queue).reverse()
+    return legalMoves.concat(this.determineLegalMoves(queue, input, depth + 1)).reverse()
   }
+
+  getLastSolidBlockInChain(block, pos) {
+    var nextBlock = this.getBlockAtPosition(pos)
+    var direction = Util.getDirectionFromMoveDelta({
+      from: block.position,
+      to: pos
+    })
+
+    if (!nextBlock) return block
+    if (!nextBlock.isSolid()) return block
+    return this.getLastSolidBlockInChain(
+      nextBlock,
+      Util.getNextPosition(nextBlock.position, direction)
+    )
+  }
+
+  blockCanBeMovedTo(block, pos, allowMovable = false) {
+    var destination = this.getBlockAtPosition(pos)
+    if (!destination) return false
+    var nextPos = Util.getNextPosition(destination.position, Util.getDirectionFromMoveDelta({
+      from: block.position,
+      to: pos
+    }))
+
+    if (destination.isSteppable()) return true
+    if (allowMovable && destination.isMovable()) {
+      return this.blockCanBeMovedTo(destination, nextPos)
+    }
+  }
+
+  getPlayerMoves(input) {
+    return this.getPlayerIcons().map(icon => ({
+      to: Util.getNextPosition(icon.position, input),
+      from: icon.position,
+      _: icon.name
+    }))
+  }
+
+  /*
+  _br_
+
+  moves:
+    from: 0,1 to: 0,2
+    from: 0,2 to: 0,3
+  */
 
   processQueuedMoves(queue, input) {
     var requeue = []
     return queue.map(move => {
+      var toBlock = this.getBlockAtPosition(move.to)
       var nextPos = Util.getNextPosition(move.to, input)
       var nextBlock = this.getBlockAtPosition(nextPos)
+
+      if (!nextBlock && toBlock)
 
       // same logic as determineLegalMoves
       if (!nextBlock) return false
