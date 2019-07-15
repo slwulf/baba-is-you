@@ -34,7 +34,7 @@ var game = new Game([
   'S': Game.Blocks.PROPERTIES.Stop,
   'U': Game.Blocks.PROPERTIES.You
 },
-new RenderingEngine())
+new RenderingEngine(new RenderingEngine()))
 
 document.body.addEventListener('keyup', event => {
   console.clear()
@@ -50,18 +50,7 @@ document.body.addEventListener('keyup', event => {
 })
 
 render()
-// renderWithRenderer()
-
 function render() {
-  var $level = document.querySelector('pre')
-  var state = game.getCurrentState()
-  if (state !== $level.innerText) {
-    $level.innerText = game.getCurrentState()
-  }
-  requestAnimationFrame(render)
-}
-
-function renderWithRenderer() {
   game.render()
-  setTimeout(renderWithRenderer, 500)
+  requestAnimationFrame(render)
 }

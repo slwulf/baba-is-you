@@ -25,11 +25,13 @@ export default class Renderer {
   }
 
   renderFrame() {
-    return this.engine.renderFrame(this.frame)
+    this.engine.renderFrame(this.frame)
+    this.frame.splice(0, this.frame.length)
   }
 
   renderFrameSync() {
-    return this.engine.renderFrameSync(this.frame)
+    this.engine.renderFrameSync(this.frame)
+    this.frame.splice(0, this.frame.length)
   }
 }
 

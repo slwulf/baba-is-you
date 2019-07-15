@@ -6,7 +6,7 @@
   - see Game#determineLegalMoves
 - debug player movement
   - when player steps on a non-movable icon, the icon disappears
-- debug Renderer (keeps appending string to DOM rather than clearing first)
+- add key binding interface to game object (like renderer)
 
 ## Game Objects
 
