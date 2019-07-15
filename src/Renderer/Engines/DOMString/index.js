@@ -3,22 +3,29 @@ import Renderer from '../../../Renderer'
 
 const blocks = {
   noun: {
-    Baba: 'B'
+    Baba: 'B',
+    Rock: 'R',
+    Wall: 'W'
   },
   icon: {
-    Baba: 'b'
+    Baba: 'b',
+    Rock: 'r',
+    Wall: 'w'
   },
   joiner: {
-    Is: 's'
+    Is: 's',
+    And: '&'
   },
   property: {
-    You: 'U'
+    You: 'U',
+    Push: 'P',
+    Stop: 'S'
   }
 }
 
 export default class DOMString extends EngineBase {
   beforeRender() {
-    // document.querySelector('#game pre').remove()
+    document.querySelector('#game pre').textContent = ''
   }
 
   renderBlock(block) {
@@ -32,6 +39,7 @@ export default class DOMString extends EngineBase {
     }
 
     if (cell === Renderer.SIGNALS.GRID_CLOSE) {
+      this.renderGrid(seed)
       return seed
     }
 
@@ -42,9 +50,8 @@ export default class DOMString extends EngineBase {
     return ''
   }
 
-  getPre(text) {
-    var pre = document.createElement('pre')
-    pre.textContent = text
-    return pre
+  renderGrid(grid) {
+    var pre = document.querySelector('#game pre')
+    pre.textContent = grid
   }
 }
