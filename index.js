@@ -1,18 +1,26 @@
 import Game from './src/Game.js'
 import RenderingEngine from './src/Renderer/Engines/DOMString'
 
+const big = `
+BsU__________________RsP
+________________________
+________________________
+___b_r_r________________
+________________________
+___________________r____
+________________________
+`
+
+const smol = `
+BsU___RsP
+___br_r__
+_________
+`
+
 // when parsing levels, first line is assumed to be
 // level title or whitespace
 var game = new Game([
-  `
-  BsU__________________RsP
-  ________________________
-  ___________b____________
-  _____r_r________________
-  ________________________
-  ________r___r___________
-  ________________________
-  `
+  big
 ], {
   '_': Game.Blocks.BLANK,
   'b': Game.Blocks.ICONS.Baba,
@@ -26,6 +34,7 @@ var game = new Game([
 new RenderingEngine())
 
 document.body.addEventListener('keyup', event => {
+  console.clear()
   var {key} = event
   if (key.indexOf('Arrow') === 0) {
     var direction = key.replace('Arrow', '')
