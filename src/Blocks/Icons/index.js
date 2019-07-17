@@ -10,5 +10,7 @@ class IconBase extends BlockBase {
 class Baba extends IconBase {}
 class Rock extends IconBase {}
 class Wall extends IconBase {}
+class Flag extends IconBase {}
+class Skull extends IconBase {}
 
 export default {Baba, Rock, Wall}

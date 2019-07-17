@@ -19,6 +19,10 @@ export default class Base {
     this.properties.push(property)
   }
 
+  hasProperty(property) {
+    return this.properties.some(p => p.hasEffect(property))
+  }
+
   setPosition(x, y) {
     this.position = {x, y}
   }
@@ -28,7 +32,7 @@ export default class Base {
   }
 
   isSolid() {
-    return this.isWord() || this.properties.some(p => p.hasEffect(EFFECTS.SOLID))
+    return this.isWord() || this.hasProperty(EFFECTS.SOLID)
   }
 
   isMovable() {
@@ -42,7 +46,15 @@ export default class Base {
   }
 
   isYou() {
-    return this.properties.some(p => p.hasEffect(EFFECTS.YOU))
+    return this.hasProperty(EFFECTS.YOU)
+  }
+
+  isWin() {
+    return this.hasProperty(EFFECTS.WIN)
+  }
+
+  isDefeat() {
+    return this.hasProperty(EFFECTS.DEFEAT)
   }
 
   isBlank() {
