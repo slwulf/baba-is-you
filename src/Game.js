@@ -188,6 +188,38 @@ export default class Game {
 
     this.renderer.renderFrameSync()
   }
+
+  start() {
+    var render = () => {
+      this.render()
+      requestAnimationFrame(render)
+    }
+
+    requestAnimationFrame(render)
+  }
+
+  setKeyBindings(keys, bind) {
+    var dirs = ['Up', 'Right', 'Down', 'Left']
+    bind(key => {
+      var command = keys[key]
+      var direction = dirs[command]
+      if (direction) {
+        this.updateState(direction)
+      } else if (command === Game.Keys.UNDO) {
+        this.undo()
+      } else if (command === Game.Keys.RESET) {
+        this.reset()
+      }
+    })
+  }
 }
 
 Game.Blocks = Blocks
+Game.Keys = {
+  UP: 0,
+  RIGHT: 1,
+  DOWN: 2,
+  LEFT: 3,
+  UNDO: 4,
+  RESET: 5
+}

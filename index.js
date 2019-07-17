@@ -2,13 +2,15 @@ import Game from './src/Game.js'
 import RenderingEngine from './src/Renderer/Engines/DOMString'
 
 const big = `
-BsU__________________WsS
-________b________wwww___
-____________________w___
-_____RsP____________wwww
-_______________________w
-___________________r____
+BsUw________________wFs!
+wwww____b___________wwww
+_________________r______
+_____RsP________________
 ________________________
+rrrrrrrrr_______________
+________________________
+__f_________________wwww
+____________________wWsS
 `
 
 const smol = `
@@ -18,23 +20,22 @@ _________
 `
 
 var engine = new RenderingEngine(new RenderingEngine())
-var game = new Game([smol], engine)
+var game = new Game([big], engine)
 
-document.body.addEventListener('keyup', event => {
-  console.clear()
-  var {key} = event
-  if (key.indexOf('Arrow') === 0) {
-    var direction = key.replace('Arrow', '')
-    game.updateState(direction)
-  } else if (key === 'z') {
-    game.undo()
-  } else if (key === 'x') {
-    game.reset()
-  }
+var keys = {
+  'ArrowLeft': Game.Keys.LEFT,
+  'ArrowRight': Game.Keys.RIGHT,
+  'ArrowUp': Game.Keys.UP,
+  'ArrowDown': Game.Keys.DOWN,
+  'z': Game.Keys.UNDO,
+  'x': Game.Keys.RESET
+}
+
+game.setKeyBindings(keys, handler => {
+  document.body.addEventListener('keyup', event => {
+    console.clear()
+    handler(event.key)
+  })
 })
 
-render()
-function render() {
-  game.render()
-  requestAnimationFrame(render)
-}
+game.start()

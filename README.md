@@ -5,7 +5,8 @@
   - when pushing a chain, player steps between first and second items and ends up pushing second
   - see Game#determineLegalMoves
 - implement WIN and DEFEAT blocks
-- add key binding interface to game object (like renderer)
+  - decide how to handle win
+  - be able to destroy player and pushed blocks on touch of defeat block
 - MOAR ICONS
 - MOAR PROPERTIES
   - sink/float
