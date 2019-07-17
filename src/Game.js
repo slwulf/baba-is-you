@@ -31,12 +31,13 @@ export default class Game {
 
     // TODO: bail early if YOU is not connected
 
-    this.state.history.applyChanges(
-      this.determineLegalMoves(
-        this.getPlayerMoves(input),
-        input
-      )
-    )
+    var moves = this.determineLegalMoves(this.getPlayerMoves(input), input)
+    if (this.didPlayerWin(moves)) {
+      // TODO: idk move to the next level, probably show a message or something
+      console.log('YOU WON!')
+    }
+
+    this.state.history.applyChanges(moves)
 
     this.state.currentGrid = Util.getObjectsForMap(
       this.state.history.last
@@ -137,6 +138,14 @@ export default class Game {
         rule.properties.forEach(p => icon.addProperty(p))
       })
     })
+  }
+
+  didPlayerWin(moves) {
+    return moves.reduce((won, move) => {
+      var fromBlock = this.getBlockAtPosition(move.from)
+      var toBlock = this.getBlockAtPosition(move.to)
+      return won || (fromBlock.isYou() && toBlock.isWin())
+    }, false)
   }
 
   getIconsForNoun(noun) {

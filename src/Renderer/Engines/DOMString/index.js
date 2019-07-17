@@ -23,7 +23,9 @@ const blocks = {
   property: {
     You: 'U',
     Push: 'P',
-    Stop: 'S'
+    Stop: 'S',
+    Win: '!',
+    Defeat: 'X'
   }
 }
 
