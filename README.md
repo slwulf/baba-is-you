@@ -1,5 +1,13 @@
 # Baba Is You
 
+This repo is a fun solo project with the goal of recreating the popular puzzle game Baba Is You in JavaScript. It's just for fun! I highly recommend purchasing the original game as it is a fantastic puzzler.
+
+#### Usage
+- Clone the repo and run `npm install`
+- Run `npm start` to build the assets and start a web server to serve the page
+- Navigate to [http://localhost:1234](http://localhost:1234) in your browser
+- Use arrow keys for movement, `z` to undo, and `x` to reset
+
 #### TODO
 - debug pushable objects
   - when pushing a chain, player steps between first and second items and ends up pushing second
