@@ -4,7 +4,15 @@
 - debug pushable objects
   - when pushing a chain, player steps between first and second items and ends up pushing second
   - see Game#determineLegalMoves
+- implement WIN and DEFEAT blocks
 - add key binding interface to game object (like renderer)
+- MOAR ICONS
+- MOAR PROPERTIES
+  - sink/float
+  - open/shut
+  - hot/melt
+
+[full list of words and rules](https://www.appunwrapper.com/2019/03/24/baba-is-you-words-and-rules-walkthrough-guide/)
 
 ## Game Objects
 

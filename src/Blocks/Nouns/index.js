@@ -10,5 +10,7 @@ class NounBase extends BlockBase {
 class Baba extends NounBase {}
 class Rock extends NounBase {}
 class Wall extends NounBase {}
+class Flag extends NounBase {}
+class Skull extends NounBase {}
 
 export default {Baba, Rock, Wall}
