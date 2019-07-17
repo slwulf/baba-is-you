@@ -4,8 +4,7 @@ import Blocks from './Blocks'
 import Renderer from './Renderer'
 
 export default class Game {
-  constructor(levels = [''], legend = {}, engine) {
-    this.legend = legend
+  constructor(levels = [''], engine) {
     this.levels = levels
     this.renderer = new Renderer(engine)
     this.state = {
@@ -13,7 +12,7 @@ export default class Game {
         Util.sanitizeMapString(levels[0])
       ),
       currentLevel: 0,
-      currentGrid: Util.getObjectsForMap(levels[0], legend)
+      currentGrid: Util.getObjectsForMap(levels[0])
     }
   }
 
@@ -40,8 +39,7 @@ export default class Game {
     )
 
     this.state.currentGrid = Util.getObjectsForMap(
-      this.state.history.last,
-      this.legend
+      this.state.history.last
     )
   }
 

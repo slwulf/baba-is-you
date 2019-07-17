@@ -13,4 +13,4 @@ class Wall extends IconBase {}
 class Flag extends IconBase {}
 class Skull extends IconBase {}
 
-export default {Baba, Rock, Wall}
+export default {Baba, Rock, Wall, Flag, Skull}
