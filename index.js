@@ -12,29 +12,13 @@ ________________________
 `
 
 const smol = `
-BsU___RsP
-___br_r__
+BsU___FsW
+__b___f__
 _________
 `
 
-// when parsing levels, first line is assumed to be
-// level title or whitespace
-var game = new Game([
-  big
-], {
-  '_': Game.Blocks.BLANK,
-  'b': Game.Blocks.ICONS.Baba,
-  'r': Game.Blocks.ICONS.Rock,
-  'w': Game.Blocks.ICONS.Wall,
-  'B': Game.Blocks.NOUNS.Baba,
-  'R': Game.Blocks.NOUNS.Rock,
-  'W': Game.Blocks.NOUNS.Wall,
-  's': Game.Blocks.JOINERS.Is,
-  'P': Game.Blocks.PROPERTIES.Push,
-  'S': Game.Blocks.PROPERTIES.Stop,
-  'U': Game.Blocks.PROPERTIES.You
-},
-new RenderingEngine(new RenderingEngine()))
+var engine = new RenderingEngine(new RenderingEngine())
+var game = new Game([smol], engine)
 
 document.body.addEventListener('keyup', event => {
   console.clear()

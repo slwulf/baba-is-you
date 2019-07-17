@@ -5,12 +5,16 @@ const blocks = {
   noun: {
     Baba: 'B',
     Rock: 'R',
-    Wall: 'W'
+    Wall: 'W',
+    Flag: 'F',
+    Skull: 'K'
   },
   icon: {
     Baba: 'b',
     Rock: 'r',
-    Wall: 'w'
+    Wall: 'w',
+    Flag: 'f',
+    Skull: 'k'
   },
   joiner: {
     Is: 's',

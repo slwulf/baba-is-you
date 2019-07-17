@@ -1,10 +1,11 @@
 import Rule from './Rule.js'
+import {LEGEND} from './Constants.js'
 
 export default {
-  getObjectsForMap(mapStr = '', legend = {}) {
+  getObjectsForMap(mapStr = '') {
     return this.splitMapString(mapStr)
       .map((row, i) => row.map((char, j) => {
-        var Block = legend[char]
+        var Block = LEGEND[char]
         if (typeof Block !== 'function') {
           throw new Error(`Could not find Block constructor in legend for "${char}"`)
         }
