@@ -23,13 +23,13 @@ export default function History() {
       var newState = diff.reduce((state, delta) => {
         var fromBlock = state[delta.from.x][delta.from.y]
         var toBlock = state[delta.to.x][delta.to.y]
-        var prevBlock = this.getPrevBlock(delta.to)
+        var prevBlock = this.getPrevBlock(delta.from)
         coveredBlocks.push({
           x: delta.to.x,
           y: delta.to.y,
           char: toBlock
         })
-        if (toBlock === 'b') debugger
+
         state[delta.to.x][delta.to.y] = `${fromBlock}`
         // TODO: use a constant here for "blank" default
         state[delta.from.x][delta.from.y] = `${prevBlock || '_'}`
