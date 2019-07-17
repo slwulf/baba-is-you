@@ -15,7 +15,9 @@ export const LEGEND = {
   's': Blocks.JOINERS.Is,
   'P': Blocks.PROPERTIES.Push,
   'S': Blocks.PROPERTIES.Stop,
-  'U': Blocks.PROPERTIES.You
+  'U': Blocks.PROPERTIES.You,
+  '!': Blocks.PROPERTIES.Win,
+  'X': Blocks.PROPERTIES.Defeat
 }
 
 export const EFFECTS = {
