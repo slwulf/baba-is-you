@@ -1,5 +1,8 @@
 {
   "name": "baba",
+  "engines": {
+    "node": "10.9.0"
+  },
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
