@@ -4,8 +4,6 @@
 - debug pushable objects
   - when pushing a chain, player steps between first and second items and ends up pushing second
   - see Game#determineLegalMoves
-- debug player movement
-  - when player steps on a non-movable icon, the icon disappears
 - add key binding interface to game object (like renderer)
 
 ## Game Objects

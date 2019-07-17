@@ -60,8 +60,7 @@ export default class Game {
       var nextBlock = this.getBlockAtPosition(move.to)
       var nextMove = !nextBlock ? null : {
         from: nextBlock.position,
-        to: Util.getNextPosition(nextBlock.position, input),
-        _: nextBlock.name
+        to: Util.getNextPosition(nextBlock.position, input)
       }
       var lastBlockInChain = this.getLastBlockInChain(block, move.to)
       var blockAfterChain = this.getBlockAtPosition(
@@ -129,42 +128,8 @@ export default class Game {
   getPlayerMoves(input) {
     return this.getPlayerIcons().map(icon => ({
       to: Util.getNextPosition(icon.position, input),
-      from: icon.position,
-      _: icon.name
+      from: icon.position
     }))
-  }
-
-  /*
-  _br_
-
-  moves:
-    from: 0,1 to: 0,2
-    from: 0,2 to: 0,3
-  */
-
-  processQueuedMoves(queue, input) {
-    var requeue = []
-    return queue.map(move => {
-      var toBlock = this.getBlockAtPosition(move.to)
-      var nextPos = Util.getNextPosition(move.to, input)
-      var nextBlock = this.getBlockAtPosition(nextPos)
-
-      if (!nextBlock && toBlock)
-
-      // same logic as determineLegalMoves
-      if (!nextBlock) return false
-      if (nextBlock.isSteppable()) return move
-      if (nextBlock.isMovable()) {
-        requeue.push({
-          from: move.to,
-          to: nextPos
-        })
-      }
-    }).concat(
-      requeue.length > 0
-        ? this.processQueuedMoves(requeue, input)
-        : []
-    ).filter(Boolean)
   }
 
   applyProperties(rules) {
