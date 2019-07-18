@@ -38,6 +38,31 @@ export default {
       ? (dY > 0 ? 'Right' : 'Left')
       : (dX > 0 ? 'Down' : 'Up')
   },
+  getDistanceBetweenPositions(pos1, pos2) {
+    // this assumes a straight line because blocks
+    // can only move in one direction at a time
+    return pos1.x !== pos2.x
+      ? Math.abs(pos1.x - pos2.x)
+      : Math.abs(pos1.y - pos2.y)
+  },
+  sortMoves(moves, direction) {
+    var modifier = (['Left', 'Up'].indexOf(direction) > -1) ? -1 : 1
+    return moves.sort((move1, move2) => {
+      return move1.to.x !== move2.to.x
+        ? move2.to.x - (move1.to.x * modifier)
+        : move2.to.y - (move1.to.y * modifier)
+    })
+  },
+  deduplicateMoves(moves) {
+    var deduped = []
+    for (let i = 0; i < moves.length; i++) {
+      const move = moves[i];
+      if (!this.arrayContainsObject(deduped, move)) {
+        deduped.push(move)
+      }
+    }
+    return deduped
+  },
   sanitizeMapString(mapStr) {
     return mapStr.trim().replace(/[^\S\r\n]/g, '')
   },
@@ -45,9 +70,14 @@ export default {
     return mapStr.trim().split('\n').map(l => l.trim().split(''))
   },
   arrayContainsObject(arr, obj) {
-    var keys = Object.keys(obj)
-    return arr.some(item => {
-      return keys.every(k => obj[k] === item[k])
+    return !!arr.find(item => {
+      if (typeof item !== 'object') return false
+      return this.objectsAreEqual(item, obj)
+    })
+  },
+  objectsAreEqual(obj1 = {}, obj2 = {}) {
+    return Object.keys(obj1).every(k => {
+      return JSON.stringify(obj1[k]) === JSON.stringify(obj2[k])
     })
   }
 }
