@@ -18,10 +18,12 @@ export default class Game {
 
   undo() {
     this.state.history.revert(1)
+    this.updateCurrentGrid()
   }
 
   reset() {
     this.state.history.revert()
+    this.updateCurrentGrid()
   }
 
   updateState(input = '') {
@@ -32,13 +34,22 @@ export default class Game {
     // TODO: bail early if YOU is not connected
 
     var moves = this.determineLegalMoves(this.getPlayerMoves(input), input)
-    if (this.didPlayerWin(moves)) {
+    var sortedMoves = Util.sortMoves(
+      Util.deduplicateMoves(moves),
+      input
+    )
+
+    if (this.didPlayerWin(sortedMoves)) {
       // TODO: idk move to the next level, probably show a message or something
       console.log('YOU WON!')
     }
 
-    this.state.history.applyChanges(moves)
+    this.state.history.applyChanges(sortedMoves)
 
+    this.updateCurrentGrid()
+  }
+
+  updateCurrentGrid() {
     this.state.currentGrid = Util.getObjectsForMap(
       this.state.history.last
     )
@@ -50,49 +61,57 @@ export default class Game {
     return [].concat(Util.getRulesFromRows(grid)).concat(Util.getRulesFromCols(grid))
   }
 
-  determineLegalMoves(moves, input, depth = 0) {
+  determineLegalMoves(moves, direction, depth = 0) {
     if (moves.length === 0) return moves
+    if (depth > moves.length) return moves
+
     var queue = []
+    let firstBlockInChain = null
     var legalMoves = moves.map(move => {
-      var block = this.getBlockAtPosition(move.from)
-      var canMove = this.blockCanBeMovedTo(block, move.to)
-      var nextBlock = this.getBlockAtPosition(move.to)
-      var nextMove = !nextBlock ? null : {
-        from: nextBlock.position,
-        to: Util.getNextPosition(nextBlock.position, input)
-      }
-      var lastBlockInChain = this.getLastBlockInChain(block, move.to)
+      var fromBlock = this.getBlockAtPosition(move.from)
+      var toBlock = this.getBlockAtPosition(move.to)
+      var lastBlockInChain = this.getLastBlockInChain(fromBlock, move.to)
       var blockAfterChain = this.getBlockAtPosition(
-        Util.getNextPosition(lastBlockInChain.position, input)
+        Util.getNextPosition(lastBlockInChain.position, direction)
       )
+      var canMoveFirstBlock = this.blockCanBeMovedTo(fromBlock, move.to)
+      var canMoveLastBlock = blockAfterChain
+        ? this.blockCanBeMovedTo(lastBlockInChain, blockAfterChain.position)
+        : false
+      var chainLength = Util.getDistanceBetweenPositions(
+        firstBlockInChain ? firstBlockInChain.position : fromBlock.position,
+        lastBlockInChain ? lastBlockInChain.position : toBlock.position
+      );
 
-      // TODO: solve the bug and then rewrite this mess
+      // TODO: this is still broken for chains
 
-      // prevent chain from exceeding map boundaries
-      if (!nextBlock || !blockAfterChain) return false
-      if (!this.blockCanBeMovedTo(lastBlockInChain, blockAfterChain.position)) {
-        return false
+      if (firstBlockInChain === null) {
+        firstBlockInChain = fromBlock
       }
 
-      // this is here for debugging, would love to remove the depth check entirely
-      if (depth > 5) {
-        return this.blockCanBeMovedTo(block, move.to, true)
-          ? move
-          : false
-      }
+      if (
+        !canMoveFirstBlock ||
+        !toBlock ||
+        !blockAfterChain ||
+        !canMoveLastBlock
+      ) return false
 
-      // console.log(nextBlock)
-      if (canMove === undefined && nextBlock && nextBlock.isMovable()) {
+      if (lastBlockInChain.isSteppable() || toBlock.isSteppable()) return move
+
+      if (chainLength < queue.length) return move
+
+      if (toBlock && toBlock.isMovable()) {
+        var nextMove = {
+          from: toBlock.position,
+          to: Util.getNextPosition(toBlock.position, direction)
+        }
+
         if (!Util.arrayContainsObject(queue, move)) queue.push(move)
         if (!Util.arrayContainsObject(queue, nextMove)) queue.push(nextMove)
       }
-      // console.log(queue)
-
-      return canMove ? move : false
     }).filter(Boolean)
 
-    if (queue.length - depth > depth) return legalMoves.concat(queue).reverse()
-    return legalMoves.concat(this.determineLegalMoves(queue, input, depth + 1)).reverse()
+    return legalMoves.concat(this.determineLegalMoves(queue, direction, depth + 1))
   }
 
   getLastBlockInChain(block, pos) {
@@ -110,7 +129,7 @@ export default class Game {
     )
   }
 
-  blockCanBeMovedTo(block, pos, allowMovable = false) {
+  blockCanBeMovedTo(block, pos) {
     var destination = this.getBlockAtPosition(pos)
     if (!destination) return false
     var nextPos = Util.getNextPosition(destination.position, Util.getDirectionFromMoveDelta({
@@ -119,15 +138,15 @@ export default class Game {
     }))
 
     if (destination.isSteppable()) return true
-    if (allowMovable && destination.isMovable()) {
+    if (destination.isMovable()) {
       return this.blockCanBeMovedTo(destination, nextPos)
     }
   }
 
   getPlayerMoves(input) {
     return this.getPlayerIcons().map(icon => ({
-      to: Util.getNextPosition(icon.position, input),
-      from: icon.position
+      from: icon.position,
+      to: Util.getNextPosition(icon.position, input)
     }))
   }
 
