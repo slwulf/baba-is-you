@@ -9,9 +9,15 @@ This repo is a fun solo project with the goal of recreating the popular puzzle g
 - Use arrow keys for movement, `z` to undo, and `x` to reset
 
 #### TODO
-- debug pushable objects
-  - when pushing a chain, player steps between first and second items and ends up pushing second
-  - see Game#determineLegalMoves
+- what happens to the rock if the player moves up here?
+  - ```
+    _RrP_
+    __s__
+    __b__
+    ```
+  - lol need to play the actual game to figure this out
+- player movement bug
+  - if player is on top of a steppable icon that is at the edge of the map, and the player tries to go beyond the edge of the map and then moves off of the icon in another direction, the icon disappears
 - implement WIN and DEFEAT blocks
   - decide how to handle win
   - be able to destroy player and pushed blocks on touch of defeat block

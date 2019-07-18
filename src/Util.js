@@ -45,13 +45,26 @@ export default {
       ? Math.abs(pos1.x - pos2.x)
       : Math.abs(pos1.y - pos2.y)
   },
-  sortMoves(moves, direction) {
-    var modifier = (['Left', 'Up'].indexOf(direction) > -1) ? -1 : 1
-    return moves.sort((move1, move2) => {
-      return move1.to.x !== move2.to.x
-        ? move2.to.x - (move1.to.x * modifier)
-        : move2.to.y - (move1.to.y * modifier)
+  sortMoves(moves) {
+    var sorted = moves.sort((move1, move2) => {
+      if (
+        move1.from.x === move2.to.x ||
+        move1.from.y === move2.to.y
+      ) return 1
+
+      if (
+        move1.to.x === move2.from.x ||
+        move1.to.y === move2.from.y
+      ) return -1
+
+      return 0
     })
+
+    // idk why but consistently the first position should be the last
+    if (sorted.length > 1) sorted.push(sorted.splice(0, 1)[0])
+
+    // reversing them ensures they get applied as state changes in the correct order
+    return sorted.reverse()
   },
   deduplicateMoves(moves) {
     var deduped = []

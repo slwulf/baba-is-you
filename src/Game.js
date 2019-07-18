@@ -34,10 +34,7 @@ export default class Game {
     // TODO: bail early if YOU is not connected
 
     var moves = this.determineLegalMoves(this.getPlayerMoves(input), input)
-    var sortedMoves = Util.sortMoves(
-      Util.deduplicateMoves(moves),
-      input
-    )
+    var sortedMoves = Util.sortMoves(Util.deduplicateMoves(moves))
 
     if (this.didPlayerWin(sortedMoves)) {
       // TODO: idk move to the next level, probably show a message or something
@@ -45,7 +42,6 @@ export default class Game {
     }
 
     this.state.history.applyChanges(sortedMoves)
-
     this.updateCurrentGrid()
   }
 
@@ -82,8 +78,6 @@ export default class Game {
         firstBlockInChain ? firstBlockInChain.position : fromBlock.position,
         lastBlockInChain ? lastBlockInChain.position : toBlock.position
       );
-
-      // TODO: this is still broken for chains
 
       if (firstBlockInChain === null) {
         firstBlockInChain = fromBlock
