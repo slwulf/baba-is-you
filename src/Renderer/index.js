@@ -33,6 +33,10 @@ export default class Renderer {
     this.engine.renderFrameSync(this.frame)
     this.frame.splice(0, this.frame.length)
   }
+
+  renderWinScreen() {
+    this.engine.renderWinScreen()
+  }
 }
 
 Renderer.SIGNALS = {

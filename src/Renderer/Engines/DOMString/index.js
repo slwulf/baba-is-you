@@ -60,4 +60,9 @@ export default class DOMString extends EngineBase {
     var pre = document.querySelector('#game pre')
     pre.textContent = grid
   }
+
+  renderWinScreen() {
+    var pre = document.querySelector('#game pre')
+    pre.textContent = 'Congratulations!'
+  }
 }

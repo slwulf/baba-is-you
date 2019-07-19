@@ -9,23 +9,40 @@ This repo is a fun solo project with the goal of recreating the popular puzzle g
 - Use arrow keys for movement, `z` to undo, and `x` to reset
 
 #### TODO
-- what happens to the rock if the player moves up here?
-  - ```
-    _RrP_
-    __s__
-    __b__
-    ```
-  - lol need to play the actual game to figure this out
-- player movement bug
-  - if player is on top of a steppable icon that is at the edge of the map, and the player tries to go beyond the edge of the map and then moves off of the icon in another direction, the icon disappears
-- implement WIN and DEFEAT blocks
-  - decide how to handle win
-  - be able to destroy player and pushed blocks on touch of defeat block
+- be able to destroy player and pushed blocks on touch of defeat block
+- be able to determine rules defined vertically
+- abstract movement determination from Game into its own class
+- add a canvas rendering engine
 - MOAR ICONS
 - MOAR PROPERTIES
   - sink/float
   - open/shut
   - hot/melt
+- should each map have its own block legend, or the ability to override a default legend?
+  - would make it easier to read maps inline
+  - tbh should probably abstract map creation somewhat, it'd be nice to build with blocks directly instead of being limited by strings
+- edge case: player movement bug
+  - if player is on top of a steppable icon that is at the edge of the map, and the player tries to go beyond the edge of the map and then moves off of the icon in another direction, the icon disappears
+- edge case: what happens to the rock if the player moves up here? (reduced case, assume blank space in all directions)
+  - ```
+    _RrP_
+    __s__
+    __b__
+    ```
+  - the Is block occupies the same grid square as the rock icon
+  - if the player moves up a second time, both the Is block and the rock icon move up (still on the same square)
+    - this is the point at which this version diverges; since the state is kept as a string, we don't really understand that the rock and the Is occupy the same square at this point
+    - this is due to the fact that History keeps track of previously-stepped icons, not Game, which means that the movement logic cannot account for both blocks in one move
+    - need to change either the way we keep track of state to allow multiple blocks to occupy one grid space, or move the "covered blocks" tracking into the Game instance and account for it in `determineLegalMoves`
+    - potentially track state as a multidimensional array such that each grid square is an array
+      - each block in a grid square is an object representing its block: `{ type: 'Joiner', name: 'Is' }`
+      - empty array is Blank
+      - this is stringifiable json and can work easily with the existing History class
+      - what are the implications on things like `Rule.fromArray` and `determineLegalMoves` if multiple blocks can inhabit one square?
+        - for moves, possibly nothing, or minimal change? it's unlikely we could have more than two blocks per square (how would one set this up to happen in-game?) and a 2-block space would have to consist of a non-solid icon and a pushable block (again, how else would you set this up?) so one of the blocks will be steppable and the other will be pushable
+        - for rules it's similar. the same thing applies here (re: steppable & pushable) but in this case we only care about Word blocks, so we should be able to reduce rows down to single blocks at a time and ignore any blocks that are not Words. it will require some amount of finagling to get flat arrays that represent grid rows without the blocks we don't care about though
+  - if the player moves up a third time, the Is block is pushed up and the player steps on the rock icon
+  - a fourth and final push leaves the rock icon in place and continues pushing the Is block
 
 [full list of words and rules](https://www.appunwrapper.com/2019/03/24/baba-is-you-words-and-rules-walkthrough-guide/)
 

@@ -19,8 +19,26 @@ __b___f__
 _________
 `
 
+const levels = [
+`
+BsU_____Fs!
+___________
+wwwwwwwwwww
+_____r_____
+_b___r___f_
+_____r_____
+wwwwwwwwwww
+___________
+WsS_____RsP
+`,
+smol,
+big
+]
+
+const debugLevels = [smol]
+
 var engine = new RenderingEngine(new RenderingEngine())
-var game = new Game([big], engine)
+var game = new Game(levels, engine)
 
 var keys = {
   'ArrowLeft': Game.Keys.LEFT,
