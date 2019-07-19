@@ -7,12 +7,17 @@ export default class Game {
   constructor(levels = [''], engine) {
     this.levels = levels
     this.renderer = new Renderer(engine)
+
+    this.setInitialState()
+  }
+
+  setInitialState(currentLevel = 0) {
+    var map = this.levels[currentLevel]
     this.state = {
-      history: History.of(
-        Util.sanitizeMapString(levels[0])
-      ),
-      currentLevel: 0,
-      currentGrid: Util.getObjectsForMap(levels[0])
+      currentLevel,
+      history: History.of(Util.sanitizeMapString(map)),
+      currentGrid: Util.getObjectsForMap(map),
+      isWin: false
     }
   }
 
@@ -37,8 +42,10 @@ export default class Game {
     var sortedMoves = Util.sortMoves(Util.deduplicateMoves(moves))
 
     if (this.didPlayerWin(sortedMoves)) {
-      // TODO: idk move to the next level, probably show a message or something
-      console.log('YOU WON!')
+      this.showWinAnimation().then(() => {
+        // TODO: handle reaching the end of levels array
+        this.setInitialState(this.state.currentLevel + 1)
+      })
     }
 
     this.state.history.applyChanges(sortedMoves)
@@ -161,6 +168,19 @@ export default class Game {
     }, false)
   }
 
+  showWinAnimation() {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        this.state.isWin = true
+        setTimeout(() => {
+          this.state.isWin = false
+          // TODO: be able to cancel this w/ player input
+          resolve()
+        }, 2500);
+      }, 750)
+    })
+  }
+
   getIconsForNoun(noun) {
     return this.state.currentGrid.flatMap(row => {
       return row.filter(block => block.isIcon() && block.name === noun.name)
@@ -189,6 +209,10 @@ export default class Game {
   }
 
   render() {
+    if (this.state.isWin) {
+      return this.renderer.renderWinScreen()
+    }
+
     this.renderer.gridOpen()
     this.state.currentGrid.forEach(row => {
       this.renderer.lineOpen()
