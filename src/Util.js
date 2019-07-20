@@ -16,7 +16,10 @@ export default {
     return grid.flatMap(row => Rule.fromArray(row) || [])
   },
   getRulesFromCols(grid) {
-    return []
+    var cols = grid[0].map((_, y) =>
+      grid.map((__, x) => grid[x][y]))
+
+    return this.getRulesFromRows(cols)
   },
   getNextPosition({x,y}, input) {
     switch (input) {

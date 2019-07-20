@@ -9,10 +9,11 @@ This repo is a fun solo project with the goal of recreating the popular puzzle g
 - Use arrow keys for movement, `z` to undo, and `x` to reset
 
 #### TODO
-- be able to destroy player and pushed blocks on touch of defeat block
-- be able to determine rules defined vertically
+- be able to destroy player icon touch of defeat block
 - abstract movement determination from Game into its own class
 - add a canvas rendering engine
+  - here's the original one i made, probably a good reference https://github.com/atwulf/canvas-engine/
+  - lol proof of concept for a DOM renderer that renders actual DOM https://codepen.io/atwulf/pen/24bbafe1116fd71dde1a08acbaaeb348
 - MOAR ICONS
 - MOAR PROPERTIES
   - sink/float
@@ -49,11 +50,11 @@ This repo is a fun solo project with the goal of recreating the popular puzzle g
 
 ## Game Objects
 
-All of these take up one grid space of a level. Icons have no collision by default. Words have collision and can always be pushed.
+All of these take up one grid space of a level. Icons have no collision by default. Words have collision and can always be pushed, regardless of any properties applied to them by rules.
 
 - **Icons:** baba, rock, crab, jelly, wall, flag, key, door, etc
 - **Nouns:** BABA, ROCK, etc (for every Icon there is a Noun)
-- **Joiners:** IS, AND (are there others?)
+- **Joiners:** IS, AND, HAS, NOT, ON, LONELY
 - **Properties:** YOU, PUSH, STOP, WIN, DEFEAT, etc
 
 ## Rules
