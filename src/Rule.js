@@ -74,7 +74,7 @@ function validateRuleGroup(blocks) {
 }
 
 function validateFiveBlocks(...blocks) {
-  if (blocks.length < 5) return false
+  if (blocks.filter(Boolean).length < 5) return false
   return [
     b => b.isNoun(),
     b => b.isJoiner() && b.name === 'Is',
@@ -85,6 +85,7 @@ function validateFiveBlocks(...blocks) {
 }
 
 function validateThreeBlocks(...blocks) {
+  if (blocks.filter(Boolean).length < 3) return false
   return [
     b => b.isNoun(),
     b => b.isJoiner() && b.name === 'Is',

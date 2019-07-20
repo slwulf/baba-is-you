@@ -1,5 +1,5 @@
 import Rule from './Rule.js'
-import {LEGEND} from './Constants.js'
+import {LEGEND, EFFECTS} from './Constants.js'
 
 export default {
   getObjectsForMap(mapStr = '') {
@@ -12,6 +12,11 @@ export default {
         return new Block(i, j)
       }))
   },
+  playerIsDefined(rules) {
+    return rules.reduce((isYou, rule) => {
+      return isYou || rule.hasProperty(EFFECTS.YOU)
+    }, false)
+  },
   getRulesFromRows(grid) {
     return grid.flatMap(row => Rule.fromArray(row) || [])
   },
@@ -20,6 +25,9 @@ export default {
       grid.map((__, x) => grid[x][y]))
 
     return this.getRulesFromRows(cols)
+  },
+  getBlockAtPosition(grid, {x, y}) {
+    return grid[x] ? (grid[x][y] || null) : null
   },
   getNextPosition({x,y}, input) {
     switch (input) {
