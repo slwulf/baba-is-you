@@ -2,6 +2,7 @@ import History from './History.js'
 import Util from './Util.js'
 import Blocks from './Blocks'
 import Renderer from './Renderer'
+import Movement from './Movement'
 
 export default class Game {
   constructor(levels = [''], engine) {
@@ -31,12 +32,32 @@ export default class Game {
     this.updateCurrentGrid()
   }
 
+  _updateState(dir = '') {
+    var rules = this.determineRules()
+    var movement = new Movement(rules, this.state)
+    var moves = movement.getLegalMoves(dir)
+
+    if (moves.length === 0) return
+    if (this.didPlayerWin(moves)) {
+      // copy paste the same stuff into here
+    }
+
+    this.state.history.applyChanges(moves)
+    this.updateCurrentGrid()
+  }
+
   updateState(input = '') {
+    var rules = this.determineRules()
     this.applyProperties(
-      this.determineRules()
+      rules
     )
 
-    // TODO: bail early if YOU is not connected
+    try {
+      var movement = new Movement(rules, this.state)
+      console.log(movement.getLegalMoves(input))
+    } catch (err) {
+      console.error(err)
+    }
 
     var moves = this.determineLegalMoves(this.getPlayerMoves(input), input)
     var sortedMoves = Util.sortMoves(Util.deduplicateMoves(moves))
@@ -60,7 +81,6 @@ export default class Game {
 
   determineRules() {
     var grid = this.state.currentGrid
-    // TODO: implement getRulesFromCols
     return [].concat(Util.getRulesFromRows(grid)).concat(Util.getRulesFromCols(grid))
   }
 
