@@ -38,14 +38,13 @@ The goal of this project is to recreate the popular puzzle game [Baba Is You](ht
   - the Is block occupies the same grid square as the rock icon
   - if the player moves up a second time, both the Is block and the rock icon move up (still on the same square)
     - this is the point at which this version diverges; since the state is kept as a string, we don't really understand that the rock and the Is occupy the same square at this point
-      - this issue also causes a bug where a player can bypass a Defeat icon by pushing a single block ahead of it (the movable block overlaps the defeat icon when the player steps to where the defeat icon should be)
     - this is due to the fact that History keeps track of previously-stepped icons, not Game, which means that the movement logic cannot account for both blocks in one move
-    - need to change either the way we keep track of state to allow multiple blocks to occupy one grid space, or move the "covered blocks" tracking into the Game instance and account for it in `determineLegalMoves`
+    - need to change either the way we keep track of state to allow multiple blocks to occupy one grid space, or move the "covered blocks" tracking into the Game instance and account for it in Movement
     - potentially track state as a multidimensional array such that each grid square is an array
       - each block in a grid square is an object representing its block: `{ type: 'Joiner', name: 'Is' }`
       - empty array is Blank
       - this is stringifiable json and can work easily with the existing History class
-      - what are the implications on things like `Rule.fromArray` and `determineLegalMoves` if multiple blocks can inhabit one square?
+      - what are the implications on things like `Rule.fromArray` and `Movement` if multiple blocks can inhabit one square?
         - for moves, possibly nothing, or minimal change? it's unlikely we could have more than two blocks per square (how would one set this up to happen in-game?) and a 2-block space would have to consist of a non-solid icon and a pushable block (again, how else would you set this up?) so one of the blocks will be steppable and the other will be pushable
         - for rules it's similar. the same thing applies here (re: steppable & pushable) but in this case we only care about Word blocks, so we should be able to reduce rows down to single blocks at a time and ignore any blocks that are not Words. it will require some amount of finagling to get flat arrays that represent grid rows without the blocks we don't care about though
   - if the player moves up a third time, the Is block is pushed up and the player steps on the rock icon
