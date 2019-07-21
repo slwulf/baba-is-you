@@ -2,7 +2,7 @@
 
 The goal of this project is to recreate the popular puzzle game [Baba Is You](https://hempuli.com/baba/) in vanilla JavaScript. It's just for fun; I'm not really looking for collaborators! I highly recommend purchasing the original game as it is a fantastic puzzler.
 
-<img src="screen.png" width="300" />
+<img src="screen.png" width="400" />
 
 ## Usage
 - Clone the repo and run `npm install`
