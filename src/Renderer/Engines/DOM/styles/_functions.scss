@@ -1,0 +1,3 @@
+@function newline($str1, $str2) {
+  @return $str1 + "\00000a" + $str2;
+}

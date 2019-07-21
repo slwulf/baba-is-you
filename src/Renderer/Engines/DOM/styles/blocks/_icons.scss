@@ -1,0 +1,14 @@
+@import 'variables', 'mixins';
+
+&-icon {
+  &:after {
+    line-height: 1.4;
+  }
+
+  @include block-content(baba, '🐰', $off-white);
+  @include block-content(rock, '🗿', $brown);
+  @include block-content(flag, '🏳', $gold);
+  @include block-content(wall, '⬛️', $light-gray);
+  @include block-content(water, '⬛️', $blue);
+  @include block-content(skull, '💀', $red);
+}

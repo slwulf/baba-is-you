@@ -1,0 +1,36 @@
+@import 'variables', 'mixins', 'functions';
+
+&-property {
+  border: 2px solid $dark-gray;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 115%;
+
+  &:after {
+    color: $dark-gray;
+  }
+
+  @include block-content(you, 'YOU') {
+    background-color: $pink;
+  };
+
+  @include block-content(win, 'WIN') {
+    background-color: $gold;
+  };
+
+  @include block-content(defeat, newline('DEF','EAT')) {
+    background-color: $red;
+  };
+
+  @include block-content(stop, newline('ST','OP')) {
+    background-color: $green;
+  };
+
+  @include block-content(push, newline('PU','SH')) {
+    background-color: $brown;
+  };
+
+  @include block-content(sink, newline('SI','NK')) {
+    background-color: $blue;
+  };
+}

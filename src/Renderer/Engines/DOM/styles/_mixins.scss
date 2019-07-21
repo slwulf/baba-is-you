@@ -1,0 +1,13 @@
+@mixin block-content($name, $content, $color: false) {
+  &--#{$name} {
+    @content;
+
+    &:after {
+      content: $content;
+      @if $color {
+        color: transparent;
+        text-shadow: 0 0 0 $color;
+      }
+    }
+  }
+}

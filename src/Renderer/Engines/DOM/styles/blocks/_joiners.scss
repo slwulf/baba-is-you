@@ -1,0 +1,7 @@
+@import 'variables', 'mixins', 'functions';
+
+&-joiner {
+  font-size: 150%;
+
+  @include block-content(is, 'IS')
+}

@@ -1,0 +1,29 @@
+@import 'variables', 'mixins', 'functions';
+
+&-noun {
+  font-size: 110%;
+
+  @include block-content(baba, newline('BA','BA')) {
+    color: $pink;
+  };
+
+  @include block-content(flag, newline('FL','AG')) {
+    color: $gold;
+  };
+
+  @include block-content(wall, newline('WA','LL')) {
+    color: $light-gray;
+  };
+
+  @include block-content(rock, newline('RO','CK')) {
+    color: $brown;
+  };
+
+  @include block-content(water, newline('WA','TER')) {
+    color: $blue;
+  };
+
+  @include block-content(skull, newline('SK','ULL')) {
+    color: $red;
+  };
+}

@@ -11,7 +11,6 @@ The goal of this project is to recreate the popular puzzle game [Baba Is You](ht
 - Use arrow keys for movement, `z` to undo, and `x` to reset
 
 #### TODO
-- break up DOM render scss
 - render block effects (win, float, colors, etc)
 - MOAR ICONS
 - MOAR PROPERTIES
