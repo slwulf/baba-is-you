@@ -4,19 +4,20 @@ import Engines_DOM from './src/Renderer/Engines/DOM'
 
 var game = new Game(new Engines_DOM())
 
-var keys = {
-  'ArrowLeft': Game.Keys.LEFT,
-  'ArrowRight': Game.Keys.RIGHT,
-  'ArrowUp': Game.Keys.UP,
-  'ArrowDown': Game.Keys.DOWN,
-  'z': Game.Keys.UNDO,
-  'x': Game.Keys.RESET
-}
+game.setKeyBindings((handler, INPUTS) => {
+  var keys = {
+    'ArrowLeft': INPUTS.LEFT,
+    'ArrowRight': INPUTS.RIGHT,
+    'ArrowUp': INPUTS.UP,
+    'ArrowDown': INPUTS.DOWN,
+    'z': INPUTS.UNDO,
+    'x': INPUTS.RESET
+  }
 
-game.setKeyBindings(keys, handler => {
-  document.body.addEventListener('keydown', event => {
+  document.body.addEventListener('keydown', ({key}) => {
     console.clear()
-    handler(event.key)
+    var input = keys[key]
+    handler(input)
   })
 })
 
