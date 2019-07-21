@@ -16,9 +16,12 @@ export default class Game {
     var CurrentLevel = Levels[level]
     var currentLevel = new CurrentLevel(Blocks)
     var map = currentLevel.getMap()
+    var history = History.of(Util.sanitizeMapString(map))
+    history.legend = currentLevel.getLegend()
+
     this.state = {
       currentLevel,
-      history: History.of(Util.sanitizeMapString(map)),
+      history,
       currentGrid: currentLevel.toGrid(),
       isWin: false
     }
