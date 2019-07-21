@@ -13,13 +13,12 @@ The goal of this project is to recreate the popular puzzle game [Baba Is You](ht
 #### TODO
 - break up DOM render scss
 - render block effects (win, float, colors, etc)
-- be able to deploy compiled src to gh pages
 - MOAR ICONS
 - MOAR PROPERTIES
-  - sink/float
   - open/shut
   - hot/melt
-- be able to destroy player icon on touch of defeat block
+  - float
+- be able to deploy compiled src to gh pages
 - baba is us (baba with websockets)
   - client sends player input to server
   - server applies input to current game state
@@ -39,6 +38,7 @@ The goal of this project is to recreate the popular puzzle game [Baba Is You](ht
   - the Is block occupies the same grid square as the rock icon
   - if the player moves up a second time, both the Is block and the rock icon move up (still on the same square)
     - this is the point at which this version diverges; since the state is kept as a string, we don't really understand that the rock and the Is occupy the same square at this point
+      - this issue also causes a bug where a player can bypass a Defeat icon by pushing a single block ahead of it (the movable block overlaps the defeat icon when the player steps to where the defeat icon should be)
     - this is due to the fact that History keeps track of previously-stepped icons, not Game, which means that the movement logic cannot account for both blocks in one move
     - need to change either the way we keep track of state to allow multiple blocks to occupy one grid space, or move the "covered blocks" tracking into the Game instance and account for it in `determineLegalMoves`
     - potentially track state as a multidimensional array such that each grid square is an array

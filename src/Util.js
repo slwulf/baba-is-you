@@ -104,6 +104,11 @@ export default {
       return JSON.stringify(obj1[k]) === JSON.stringify(obj2[k])
     })
   },
+  getKeyForValue(obj, test) {
+    return Object.keys(obj).reduce((result, key) => {
+      return result || (test(obj[key]) ? key : result)
+    }, undefined)
+  },
   pauseForAction(ms, action) {
     return new Promise(resolve => {
       setTimeout(() => resolve(action()), ms)

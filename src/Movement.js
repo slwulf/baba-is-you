@@ -54,6 +54,10 @@ export default class Movement {
         move.to.destroyed = true
       }
 
+      if (fromBlock.isYou() && toBlock.isDefeat()) {
+        move.from.destroyed = true
+      }
+
       if (lastBlockInChain.isSteppable() || toBlock.isSteppable()) return move
 
       if (chainLength < queue.length) return move

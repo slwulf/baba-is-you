@@ -1,8 +1,10 @@
 import Util from './Util.js'
+import {LEGEND} from './Constants.js'
 
 export default function History() {
   const commits = []
   let blocksCoveredByMovedIcons = []
+  let legend = LEGEND
 
   return {
     push(change) {
@@ -23,7 +25,7 @@ export default function History() {
       var newState = diff.reduce((state, delta) => {
         var fromBlock = state[delta.from.x][delta.from.y]
         var toBlock = state[delta.to.x][delta.to.y]
-        var prevBlock = this.getPrevBlock(delta.from)
+
         if (!delta.to.destroyed) {
           coveredBlocks.push({
             x: delta.to.x,
@@ -32,16 +34,27 @@ export default function History() {
           })
         }
 
-        // TODO: use a constant here for "blank" default
-        state[delta.to.x][delta.to.y] = `${delta.from.destroyed ? '_' : fromBlock}`
-        state[delta.from.x][delta.from.y] = `${prevBlock || '_'}`
+        var prevFrom = this.getPrevBlock(delta.from)
+        var prevTo = this.getPrevBlock(delta.to)
+
+        state[delta.to.x][delta.to.y] = this.getNewTo(delta, fromBlock, toBlock)
+        state[delta.from.x][delta.from.y] = this.getNewFrom(delta, fromBlock, toBlock)
         return state;
       }, last)
 
       this.push(
         newState.map(l => l.join('')).join('\n')
       )
+      // TODO: merge these arrays so that still-covered blocks stay covered
       blocksCoveredByMovedIcons = coveredBlocks
+    },
+
+    getNewFrom(delta, fromBlock, toBlock) {
+      return this.getPrevBlock(delta.from) || this.BLANK
+    },
+
+    getNewTo(delta, fromBlock, toBlock) {
+      return delta.from.destroyed ? toBlock : fromBlock
     },
 
     getPrevBlock({x, y}) {
@@ -56,6 +69,20 @@ export default function History() {
 
     get last() {
       return commits[commits.length - 1]
+    },
+
+    get legend() {
+      return legend
+    },
+
+    set legend(val) {
+      legend = val
+    },
+
+    get BLANK() {
+      return Util.getKeyForValue(this.legend, val => {
+        return val.name === 'Blank'
+      })
     }
   }
 }

@@ -8,6 +8,7 @@ $gold: #f2de47;
 $green: #3c7e36;
 $brown: #675122;
 $blue: #7aa2e8;
+$red: #9a2a12;
 
 @mixin block-content($name, $content, $color: false) {
   &--#{$name} {
@@ -120,6 +121,10 @@ body {
     @include block-content(water, newline('WA','TER')) {
       color: $blue;
     };
+
+    @include block-content(skull, newline('SK','ULL')) {
+      color: $red;
+    };
   }
 
   &-joiner {
@@ -146,6 +151,10 @@ body {
       background-color: $gold;
     };
 
+    @include block-content(defeat, newline('DEF','EAT')) {
+      background-color: $red;
+    };
+
     @include block-content(stop, newline('ST','OP')) {
       background-color: $green;
     };
@@ -169,5 +178,6 @@ body {
     @include block-content(flag, '🏳', $gold);
     @include block-content(wall, '⬛️', $light-gray);
     @include block-content(water, '⬛️', $blue);
+    @include block-content(skull, '💀', $red);
   }
 }
