@@ -3,7 +3,7 @@ import {LEGEND, EFFECTS, INPUTS} from './Constants.js'
 
 export default {
   getObjectsForMap(mapStr = '', legend = LEGEND) {
-    return this.splitMapString(mapStr)
+    var grid = this.splitMapString(mapStr)
       .map((row, i) => row.map((char, j) => {
         var Block = legend[char]
         if (typeof Block !== 'function') {
@@ -11,11 +11,28 @@ export default {
         }
         return new Block(i, j)
       }))
+
+    var rules = this.getDefinedRules(grid)
+    return grid.map(row => row.map(block => this.applyRules(block, rules)))
+  },
+  applyRules(block, rules) {
+    if (!block.isIcon()) return block
+    rules.forEach(rule => {
+      if (block.name === rule.target.name) {
+        rule.properties.forEach(p => block.addProperty(p))
+      }
+    })
+    return block
   },
   playerIsDefined(rules) {
     return rules.reduce((isYou, rule) => {
       return isYou || rule.hasProperty(EFFECTS.YOU)
     }, false)
+  },
+  getDefinedRules(grid) {
+    return this.getRulesFromRows(grid).concat(
+      this.getRulesFromCols(grid)
+    )
   },
   getRulesFromRows(grid) {
     return grid.flatMap(row => Rule.fromArray(row) || [])
