@@ -10,7 +10,6 @@ This repo is a fun solo project with the goal of recreating the popular puzzle g
 
 #### TODO
 - be able to destroy player icon touch of defeat block
-- abstract movement determination from Game into its own class
 - add a canvas rendering engine
   - here's the original one i made, probably a good reference https://github.com/atwulf/canvas-engine/
   - lol proof of concept for a DOM renderer that renders actual DOM https://codepen.io/atwulf/pen/24bbafe1116fd71dde1a08acbaaeb348
@@ -22,9 +21,6 @@ This repo is a fun solo project with the goal of recreating the popular puzzle g
 - should each map have its own block legend, or the ability to override a default legend?
   - would make it easier to read maps inline
   - tbh should probably abstract map creation somewhat, it'd be nice to build with blocks directly instead of being limited by strings
-- edge case: player movement bugs
-  - if player is on top of a steppable icon that is at the edge of the map, and the player tries to go beyond the edge of the map and then moves off of the icon in another direction, the icon disappears
-  - player colliding with map edge is counted as a "move" and can fill up the history with non-changes (similar/relate to above bug)
 - edge case: what happens to the rock if the player moves up here? (reduced case, assume blank space in all directions)
   - ```
     _RrP_
