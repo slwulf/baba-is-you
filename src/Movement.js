@@ -1,17 +1,17 @@
 import Util from './Util.js'
 
 export default class Movement {
-  constructor(rules, state) {
-    this.rules = rules
-    // TODO: just pull what we need here
-    this.gameState = state
-    // TODO: need to call this.applyProperties
+  constructor(grid, rules) {
+    this.grid = grid
+    this.applyProperties(rules)
   }
 
   getLegalMoves(direction) {
     var playerMoves = this.getPlayerMoves(direction)
     return Util.sortMoves(
-      Util.deduplicateMoves(this.walkMoves(playerMoves, direction))
+      Util.deduplicateMoves(
+        this.walkMoves(playerMoves, direction)
+      )
     )
   }
 
@@ -22,10 +22,11 @@ export default class Movement {
     var queue = []
     let firstBlockInChain = null
     var legalMoves = moves.map(move => {
-      var fromBlock = this.getBlockAtPosition(move.from)
-      var toBlock = this.getBlockAtPosition(move.to)
+      var fromBlock = Util.getBlockAtPosition(this.grid, move.from)
+      var toBlock = Util.getBlockAtPosition(this.grid, move.to)
       var lastBlockInChain = this.getLastBlockInChain(fromBlock, move.to)
-      var blockAfterChain = this.getBlockAtPosition(
+      var blockAfterChain = Util.getBlockAtPosition(
+        this.grid,
         Util.getNextPosition(lastBlockInChain.position, direction)
       )
       var canMoveFirstBlock = this.blockCanBeMovedTo(fromBlock, move.to)
@@ -66,12 +67,8 @@ export default class Movement {
     return legalMoves.concat(this.walkMoves(queue, direction, depth + 1))
   }
 
-  getBlockAtPosition(pos) {
-    return Util.getBlockAtPosition(this.gameState.currentGrid, pos)
-  }
-
   getLastBlockInChain(block, pos) {
-    var nextBlock = this.getBlockAtPosition(pos)
+    var nextBlock = Util.getBlockAtPosition(this.grid, pos)
     var direction = Util.getDirectionFromMoveDelta({
       from: block.position,
       to: pos
@@ -86,7 +83,7 @@ export default class Movement {
   }
 
   blockCanBeMovedTo(block, pos) {
-    var destination = this.getBlockAtPosition(pos)
+    var destination = Util.getBlockAtPosition(this.grid, pos)
     if (!destination) return false
     var nextPos = Util.getNextPosition(destination.position, Util.getDirectionFromMoveDelta({
       from: block.position,
@@ -116,10 +113,16 @@ export default class Movement {
   }
 
   getPlayerIcons() {
-    return this.gameState.currentGrid.flatMap(row => {
+    return this.grid.flatMap(row => {
       return row.filter(block => {
         return block.isIcon() && block.isYou()
       })
+    })
+  }
+
+  getIconsForNoun(noun) {
+    return this.grid.flatMap(row => {
+      return row.filter(block => block.isIcon() && block.name === noun.name)
     })
   }
 }

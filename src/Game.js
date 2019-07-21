@@ -32,44 +32,19 @@ export default class Game {
     this.updateCurrentGrid()
   }
 
-  _updateState(dir = '') {
-    var rules = this.determineRules()
-    var movement = new Movement(rules, this.state)
+  updateState(dir = '') {
+    var movement = new Movement(this.state.currentGrid, this.determineRules())
     var moves = movement.getLegalMoves(dir)
 
     if (moves.length === 0) return
     if (this.didPlayerWin(moves)) {
-      // copy paste the same stuff into here
-    }
-
-    this.state.history.applyChanges(moves)
-    this.updateCurrentGrid()
-  }
-
-  updateState(input = '') {
-    var rules = this.determineRules()
-    this.applyProperties(
-      rules
-    )
-
-    try {
-      var movement = new Movement(rules, this.state)
-      console.log(movement.getLegalMoves(input))
-    } catch (err) {
-      console.error(err)
-    }
-
-    var moves = this.determineLegalMoves(this.getPlayerMoves(input), input)
-    var sortedMoves = Util.sortMoves(Util.deduplicateMoves(moves))
-
-    if (this.didPlayerWin(sortedMoves)) {
       this.showWinAnimation().then(() => {
         // TODO: handle reaching the end of levels array
         this.setInitialState(this.state.currentLevel + 1)
       })
     }
 
-    this.state.history.applyChanges(sortedMoves)
+    this.state.history.applyChanges(moves)
     this.updateCurrentGrid()
   }
 
@@ -84,106 +59,11 @@ export default class Game {
     return [].concat(Util.getRulesFromRows(grid)).concat(Util.getRulesFromCols(grid))
   }
 
-  determineLegalMoves(moves, direction, depth = 0) {
-    if (moves.length === 0) return moves
-    if (depth > moves.length) return moves
-
-    var queue = []
-    let firstBlockInChain = null
-    var legalMoves = moves.map(move => {
-      var fromBlock = this.getBlockAtPosition(move.from)
-      var toBlock = this.getBlockAtPosition(move.to)
-      var lastBlockInChain = this.getLastBlockInChain(fromBlock, move.to)
-      var blockAfterChain = this.getBlockAtPosition(
-        Util.getNextPosition(lastBlockInChain.position, direction)
-      )
-      var canMoveFirstBlock = this.blockCanBeMovedTo(fromBlock, move.to)
-      var canMoveLastBlock = blockAfterChain
-        ? this.blockCanBeMovedTo(lastBlockInChain, blockAfterChain.position)
-        : false
-      var chainLength = Util.getDistanceBetweenPositions(
-        firstBlockInChain ? firstBlockInChain.position : fromBlock.position,
-        lastBlockInChain ? lastBlockInChain.position : toBlock.position
-      );
-
-      if (firstBlockInChain === null) {
-        firstBlockInChain = fromBlock
-      }
-
-      if (
-        !canMoveFirstBlock ||
-        !toBlock ||
-        !blockAfterChain ||
-        !canMoveLastBlock
-      ) return false
-
-      if (lastBlockInChain.isSteppable() || toBlock.isSteppable()) return move
-
-      if (chainLength < queue.length) return move
-
-      if (toBlock && toBlock.isMovable()) {
-        var nextMove = {
-          from: toBlock.position,
-          to: Util.getNextPosition(toBlock.position, direction)
-        }
-
-        if (!Util.arrayContainsObject(queue, move)) queue.push(move)
-        if (!Util.arrayContainsObject(queue, nextMove)) queue.push(nextMove)
-      }
-    }).filter(Boolean)
-
-    return legalMoves.concat(this.determineLegalMoves(queue, direction, depth + 1))
-  }
-
-  getLastBlockInChain(block, pos) {
-    var nextBlock = this.getBlockAtPosition(pos)
-    var direction = Util.getDirectionFromMoveDelta({
-      from: block.position,
-      to: pos
-    })
-
-    if (!nextBlock) return block
-    if (!nextBlock.isMovable()) return block
-    return this.getLastBlockInChain(
-      nextBlock,
-      Util.getNextPosition(nextBlock.position, direction)
-    )
-  }
-
-  blockCanBeMovedTo(block, pos) {
-    var destination = this.getBlockAtPosition(pos)
-    if (!destination) return false
-    var nextPos = Util.getNextPosition(destination.position, Util.getDirectionFromMoveDelta({
-      from: block.position,
-      to: pos
-    }))
-
-    if (destination.isSteppable()) return true
-    if (destination.isMovable()) {
-      return this.blockCanBeMovedTo(destination, nextPos)
-    }
-  }
-
-  getPlayerMoves(input) {
-    return this.getPlayerIcons().map(icon => ({
-      from: icon.position,
-      to: Util.getNextPosition(icon.position, input)
-    }))
-  }
-
-  applyProperties(rules) {
-    rules.forEach(rule => {
-      var icons = this.getIconsForNoun(rule.target)
-      icons.forEach(icon => {
-        rule.properties.forEach(p => icon.addProperty(p))
-      })
-    })
-  }
-
   didPlayerWin(moves) {
+    var grid = this.state.currentGrid
     return moves.reduce((won, move) => {
-      var fromBlock = this.getBlockAtPosition(move.from)
-      var toBlock = this.getBlockAtPosition(move.to)
+      var fromBlock = Util.getBlockAtPosition(grid, move.from)
+      var toBlock = Util.getBlockAtPosition(grid, move.to)
       return won || (fromBlock.isYou() && toBlock.isWin())
     }, false)
   }
@@ -199,33 +79,6 @@ export default class Game {
         }, 2500);
       }, 750)
     })
-  }
-
-  getIconsForNoun(noun) {
-    return this.state.currentGrid.flatMap(row => {
-      return row.filter(block => block.isIcon() && block.name === noun.name)
-    })
-  }
-
-  getPlayerIcons() {
-    return this.state.currentGrid.flatMap(row => {
-      return row.filter(block => {
-        return block.isIcon() && block.isYou()
-      })
-    })
-  }
-
-  getBlockAtPosition({x, y}) {
-    var row = this.state.currentGrid[x]
-    return row ? row[y] : null
-  }
-
-  getCurrentState() {
-    return this.state.history.last
-  }
-
-  getCurrentLevel() {
-    return Util.sanitizeMapString(this.levels[this.state.currentLevel])
   }
 
   render() {
