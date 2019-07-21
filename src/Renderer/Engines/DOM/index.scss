@@ -1,8 +1,53 @@
-$block-size: 20px;
+$block-size: 50px;
+
+$dark-gray: #282829;
+$light-gray: #999999;
+$off-white: #fceff0;
+$pink: #f99cbd;
+$gold: #f2de47;
+$green: #3c7e36;
+$brown: #675122;
+
+@mixin block-content($name, $content, $color: false) {
+  &--#{$name} {
+    @content;
+
+    &:after {
+      content: $content;
+      @if $color {
+        color: transparent;
+        text-shadow: 0 0 0 $color;
+      }
+    }
+  }
+}
+
+@function newline($str1, $str2) {
+  @return $str1 + "\00000a" + $str2;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-size: $block-size / 2.5;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: black;
+}
 
 .grid {
   display: flex;
   flex-wrap: wrap;
+  background-color: $dark-gray;
 }
 
 .row {
@@ -12,21 +57,88 @@ $block-size: 20px;
 .block {
   width: $block-size;
   height: $block-size;
-  background-color: #ccc;
+
+  &:after {
+    content: '';
+    font-size: $block-size;
+  }
+
+  &-noun, &-joiner, &-property {
+    font-family: 'Kalam', sans-serif;
+    line-height: 1;
+    color: $off-white;
+
+    &:after {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      font-size: 100%;
+      padding-top: 5px;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+  }
 
   &-noun {
-    background-color: red;
+    @include block-content(baba, newline('BA','BA')) {
+      font-size: 110%;
+      color: $pink;
+    };
+
+    @include block-content(flag, newline('FL','AG')) {
+      font-size: 110%;
+      color: $gold;
+    };
+
+    @include block-content(wall, newline('WA','LL')) {
+      font-size: 110%;
+      color: $light-gray;
+    };
+
+    @include block-content(rock, newline('RO','CK')) {
+      font-size: 110%;
+      color: $brown;
+    };
   }
 
   &-joiner {
-    background-color: blue;
+    font-size: 150%;
+
+    @include block-content(is, 'IS')
   }
 
   &-property {
-    background-color: green;
+    border: 2px solid $dark-gray;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 115%;
+
+    &:after {
+      color: $dark-gray;
+    }
+
+    @include block-content(you, 'YOU') {
+      background-color: $pink;
+    };
+
+    @include block-content(win, 'WIN') {
+      background-color: $gold;
+    };
+
+    @include block-content(stop, newline('ST','OP')) {
+      background-color: $green;
+    };
+
+    @include block-content(push, newline('PU','SH')) {
+      background-color: $brown;
+    };
   }
 
   &-icon {
-    background-color: yellow;
+    @include block-content(baba, '🐰', $off-white);
+    @include block-content(rock, '🗿', $brown);
+    @include block-content(flag, '🏳', $gold);
+    @include block-content(wall, '⬛️', $light-gray);
   }
 }
