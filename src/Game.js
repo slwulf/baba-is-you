@@ -38,7 +38,7 @@ export default class Game {
   }
 
   updateState(dir = '') {
-    var movement = new Movement(this.state.currentGrid, this.determineRules())
+    var movement = new Movement(this.state.currentGrid)
     var moves = movement.getLegalMoves(dir)
 
     if (moves.length === 0) return
@@ -58,11 +58,6 @@ export default class Game {
       this.state.history.last,
       this.state.currentLevel.getLegend()
     )
-  }
-
-  determineRules() {
-    var grid = this.state.currentGrid
-    return [].concat(Util.getRulesFromRows(grid)).concat(Util.getRulesFromCols(grid))
   }
 
   didPlayerWin(moves) {

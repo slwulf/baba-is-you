@@ -1,9 +1,8 @@
 import Util from './Util.js'
 
 export default class Movement {
-  constructor(grid, rules) {
+  constructor(grid) {
     this.grid = grid
-    this.applyProperties(rules)
   }
 
   getLegalMoves(direction) {
@@ -112,26 +111,11 @@ export default class Movement {
     }))
   }
 
-  applyProperties(rules) {
-    rules.forEach(rule => {
-      var icons = this.getIconsForNoun(rule.target)
-      icons.forEach(icon => {
-        rule.properties.forEach(p => icon.addProperty(p))
-      })
-    })
-  }
-
   getPlayerIcons() {
     return this.grid.flatMap(row => {
       return row.filter(block => {
         return block.isIcon() && block.isYou()
       })
-    })
-  }
-
-  getIconsForNoun(noun) {
-    return this.grid.flatMap(row => {
-      return row.filter(block => block.isIcon() && block.name === noun.name)
     })
   }
 }
