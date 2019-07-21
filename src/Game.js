@@ -69,16 +69,8 @@ export default class Game {
   }
 
   showWinAnimation() {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        this.state.isWin = true
-        setTimeout(() => {
-          this.state.isWin = false
-          // TODO: be able to cancel this w/ player input
-          resolve()
-        }, 2500);
-      }, 750)
-    })
+    return Util.pauseForAction(250, () => this.state.isWin = true)
+      .then(() => Util.pauseForAction(2500, () => this.state.isWin = false))
   }
 
   render() {

@@ -103,5 +103,10 @@ export default {
     return Object.keys(obj1).every(k => {
       return JSON.stringify(obj1[k]) === JSON.stringify(obj2[k])
     })
+  },
+  pauseForAction(ms, action) {
+    return new Promise(resolve => {
+      setTimeout(() => resolve(action()), ms)
+    })
   }
 }
