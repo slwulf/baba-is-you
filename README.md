@@ -2,6 +2,8 @@
 
 This repo is a fun solo project with the goal of recreating the popular puzzle game [Baba Is You](https://hempuli.com/baba/) in JavaScript. It's just for fun! I highly recommend purchasing the original game as it is a fantastic puzzler.
 
+<img src="screen.png" width="300" />
+
 #### Usage
 - Clone the repo and run `npm install`
 - Run `npm start` to build the assets and start a web server to serve the page
