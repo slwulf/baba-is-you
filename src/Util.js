@@ -2,10 +2,10 @@ import Rule from './Rule.js'
 import {LEGEND, EFFECTS} from './Constants.js'
 
 export default {
-  getObjectsForMap(mapStr = '') {
+  getObjectsForMap(mapStr = '', legend = LEGEND) {
     return this.splitMapString(mapStr)
       .map((row, i) => row.map((char, j) => {
-        var Block = LEGEND[char]
+        var Block = legend[char]
         if (typeof Block !== 'function') {
           throw new Error(`Could not find Block constructor in legend for "${char}"`)
         }

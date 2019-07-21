@@ -1,23 +1,24 @@
 import History from './History.js'
 import Util from './Util.js'
+import Levels from './Levels'
 import Blocks from './Blocks'
 import Renderer from './Renderer'
 import Movement from './Movement'
 
 export default class Game {
-  constructor(levels = [''], engine) {
-    this.levels = levels
+  constructor(engine) {
     this.renderer = new Renderer(engine)
-
     this.setInitialState()
   }
 
-  setInitialState(currentLevel = 0) {
-    var map = this.levels[currentLevel]
+  setInitialState(level = 0) {
+    var CurrentLevel = Levels[level]
+    var currentLevel = new CurrentLevel(Blocks)
+    var map = currentLevel.getMap()
     this.state = {
       currentLevel,
       history: History.of(Util.sanitizeMapString(map)),
-      currentGrid: Util.getObjectsForMap(map),
+      currentGrid: currentLevel.toGrid(),
       isWin: false
     }
   }
@@ -40,7 +41,7 @@ export default class Game {
     if (this.didPlayerWin(moves)) {
       this.showWinAnimation().then(() => {
         // TODO: handle reaching the end of levels array
-        this.setInitialState(this.state.currentLevel + 1)
+        this.setInitialState(this.state.currentLevel.toInt() + 1)
       })
     }
 
@@ -50,7 +51,8 @@ export default class Game {
 
   updateCurrentGrid() {
     this.state.currentGrid = Util.getObjectsForMap(
-      this.state.history.last
+      this.state.history.last,
+      this.state.currentLevel.getLegend()
     )
   }
 
@@ -116,7 +118,6 @@ export default class Game {
   }
 }
 
-Game.Blocks = Blocks
 Game.Keys = {
   UP: 0,
   RIGHT: 1,
