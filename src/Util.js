@@ -1,5 +1,5 @@
 import Rule from './Rule.js'
-import {LEGEND, EFFECTS} from './Constants.js'
+import {LEGEND, EFFECTS, INPUTS} from './Constants.js'
 
 export default {
   getObjectsForMap(mapStr = '', legend = LEGEND) {
@@ -31,13 +31,13 @@ export default {
   },
   getNextPosition({x,y}, input) {
     switch (input) {
-      case 'Left':
+      case INPUTS.LEFT:
         return {x, y: y-1}
-      case 'Right':
+      case INPUTS.RIGHT:
         return {x, y: y+1}
-      case 'Up':
+      case INPUTS.UP:
         return {x: x-1, y}
-      case 'Down':
+      case INPUTS.DOWN:
         return {x: x+1, y}
     }
   },
@@ -46,8 +46,8 @@ export default {
     var dY = move.to.y - move.from.y
 
     return dX === 0
-      ? (dY > 0 ? 'Right' : 'Left')
-      : (dX > 0 ? 'Down' : 'Up')
+      ? (dY > 0 ? INPUTS.RIGHT : INPUTS.LEFT)
+      : (dX > 0 ? INPUTS.DOWN : INPUTS.UP)
   },
   getDistanceBetweenPositions(pos1, pos2) {
     // this assumes a straight line because blocks

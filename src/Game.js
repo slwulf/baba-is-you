@@ -4,6 +4,7 @@ import Levels from './Levels'
 import Blocks from './Blocks'
 import Renderer from './Renderer'
 import Movement from './Movement'
+import {INPUTS} from './Constants.js'
 
 export default class Game {
   constructor(engine) {
@@ -102,27 +103,18 @@ export default class Game {
     requestAnimationFrame(render)
   }
 
-  setKeyBindings(keys, bind) {
-    var dirs = ['Up', 'Right', 'Down', 'Left']
-    bind(key => {
-      var command = keys[key]
-      var direction = dirs[command]
-      if (direction) {
-        this.updateState(direction)
-      } else if (command === Game.Keys.UNDO) {
+  setKeyBindings(bind) {
+    var dirs = [INPUTS.UP, INPUTS.RIGHT, INPUTS.DOWN, INPUTS.LEFT]
+    bind(input => {
+      var direction = dirs[input]
+      if (direction !== undefined) {
+        this.updateState(input)
+      } else if (input === INPUTS.UNDO) {
         this.undo()
-      } else if (command === Game.Keys.RESET) {
+      } else if (input === INPUTS.RESET) {
         this.reset()
       }
-    })
+    }, INPUTS)
   }
 }
 
-Game.Keys = {
-  UP: 0,
-  RIGHT: 1,
-  DOWN: 2,
-  LEFT: 3,
-  UNDO: 4,
-  RESET: 5
-}

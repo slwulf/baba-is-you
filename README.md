@@ -12,6 +12,7 @@ This repo is a fun solo project with the goal of recreating the popular puzzle g
 
 #### TODO
 - break up DOM render scss
+- render block effects (win, float, colors, etc)
 - MOAR ICONS
 - MOAR PROPERTIES
   - sink/float

@@ -36,3 +36,12 @@ export const TYPES = {
   JOINER: 'joiner',
   PROPERTY: 'property'
 }
+
+export const INPUTS = {
+  UP: 0,
+  RIGHT: 1,
+  DOWN: 2,
+  LEFT: 3,
+  UNDO: 4,
+  RESET: 5
+}
