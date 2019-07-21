@@ -1,0 +1,30 @@
+@import 'variables';
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: $dark-gray;
+  font-family: 'Kalam', sans-serif;
+  line-height: 1;
+  position: relative;
+
+  &.is-win:after {
+    content: 'Congratulations!';
+    display: block;
+    padding: 25px 30px 20px;
+    border-radius: 20px;
+    font-size: 300%;
+    text-align: center;
+    color: $dark-gray;
+    background-color: rgba(232, 199, 254, .9);
+    box-shadow: 0 0 50px $light-gray;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.row {
+  display: flex;
+}

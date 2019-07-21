@@ -1,6 +1,6 @@
 import EngineBase from '../Base.js'
 import Renderer from '../../../Renderer'
-import './index.scss'
+import './styles/index.scss'
 
 export default class DOM extends EngineBase {
   accumulateFrame(seed, cell) {
