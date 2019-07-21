@@ -24,14 +24,16 @@ export default function History() {
         var fromBlock = state[delta.from.x][delta.from.y]
         var toBlock = state[delta.to.x][delta.to.y]
         var prevBlock = this.getPrevBlock(delta.from)
-        coveredBlocks.push({
-          x: delta.to.x,
-          y: delta.to.y,
-          char: toBlock
-        })
+        if (!delta.to.destroyed) {
+          coveredBlocks.push({
+            x: delta.to.x,
+            y: delta.to.y,
+            char: toBlock
+          })
+        }
 
-        state[delta.to.x][delta.to.y] = `${fromBlock}`
         // TODO: use a constant here for "blank" default
+        state[delta.to.x][delta.to.y] = `${delta.from.destroyed ? '_' : fromBlock}`
         state[delta.from.x][delta.from.y] = `${prevBlock || '_'}`
         return state;
       }, last)

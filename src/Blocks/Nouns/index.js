@@ -12,5 +12,6 @@ class Rock extends NounBase {}
 class Wall extends NounBase {}
 class Flag extends NounBase {}
 class Skull extends NounBase {}
+class Water extends NounBase {}
 
-export default {Baba, Rock, Wall, Flag, Skull}
+export default {Baba, Rock, Wall, Flag, Skull, Water}

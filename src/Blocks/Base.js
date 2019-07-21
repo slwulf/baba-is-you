@@ -57,6 +57,10 @@ export default class Base {
     return this.hasProperty(EFFECTS.DEFEAT)
   }
 
+  isSink() {
+    return this.hasProperty(EFFECTS.SINK)
+  }
+
   isBlank() {
     return this.type === TYPES.BLANK
   }

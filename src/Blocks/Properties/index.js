@@ -48,4 +48,10 @@ class Defeat extends PropertyBase {
   }
 }
 
-export default {You, Stop, Push, Win, Defeat}
+class Sink extends PropertyBase {
+  setEffects() {
+    this.setEffect(EFFECTS.SINK, true)
+  }
+}
+
+export default {You, Stop, Push, Win, Defeat, Sink}

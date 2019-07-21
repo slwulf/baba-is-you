@@ -7,17 +7,20 @@ export const LEGEND = {
   'w': Blocks.ICONS.Wall,
   'f': Blocks.ICONS.Flag,
   'k': Blocks.ICONS.Skull,
+  'h': Blocks.ICONS.Water,
   'B': Blocks.NOUNS.Baba,
   'R': Blocks.NOUNS.Rock,
   'W': Blocks.NOUNS.Wall,
   'F': Blocks.NOUNS.Flag,
   'K': Blocks.NOUNS.Skull,
+  'H': Blocks.NOUNS.Water,
   's': Blocks.JOINERS.Is,
   'P': Blocks.PROPERTIES.Push,
   'S': Blocks.PROPERTIES.Stop,
   'U': Blocks.PROPERTIES.You,
   '!': Blocks.PROPERTIES.Win,
-  'X': Blocks.PROPERTIES.Defeat
+  'X': Blocks.PROPERTIES.Defeat,
+  '@': Blocks.PROPERTIES.Sink
 }
 
 export const EFFECTS = {
@@ -25,7 +28,8 @@ export const EFFECTS = {
   MOVABLE: 'movable',
   YOU: 'you',
   WIN: 'win',
-  DEFEAT: 'defeat'
+  DEFEAT: 'defeat',
+  SINK: 'sink'
 }
 
 export const TYPES = {
