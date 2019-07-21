@@ -40,6 +40,7 @@ This repo is a fun solo project with the goal of recreating the popular puzzle g
   - a fourth and final push leaves the rock icon in place and continues pushing the Is block
 
 [full list of words and rules](https://www.appunwrapper.com/2019/03/24/baba-is-you-words-and-rules-walkthrough-guide/)
+[full list of levels w/ screenshots](https://www.ign.com/wikis/baba-is-you/Walkthrough)
 
 ## Game Objects
 

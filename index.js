@@ -14,7 +14,7 @@ var keys = {
 }
 
 game.setKeyBindings(keys, handler => {
-  document.body.addEventListener('keyup', event => {
+  document.body.addEventListener('keydown', event => {
     console.clear()
     handler(event.key)
   })
