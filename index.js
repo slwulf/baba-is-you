@@ -1,7 +1,8 @@
 import Game from './src/Game.js'
-import RenderingEngine from './src/Renderer/Engines/DOMString'
+import Engines_DOMString from './src/Renderer/Engines/DOMString'
+import Engines_DOM from './src/Renderer/Engines/DOM'
 
-var game = new Game(new RenderingEngine())
+var game = new Game(new Engines_DOM())
 
 var keys = {
   'ArrowLeft': Game.Keys.LEFT,

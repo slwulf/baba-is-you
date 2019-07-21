@@ -9,18 +9,13 @@ This repo is a fun solo project with the goal of recreating the popular puzzle g
 - Use arrow keys for movement, `z` to undo, and `x` to reset
 
 #### TODO
-- be able to destroy player icon touch of defeat block
-- add a canvas rendering engine
-  - here's the original one i made, probably a good reference https://github.com/atwulf/canvas-engine/
-  - lol proof of concept for a DOM renderer that renders actual DOM https://codepen.io/atwulf/pen/24bbafe1116fd71dde1a08acbaaeb348
+- render distinct blocks in DOM engine
 - MOAR ICONS
 - MOAR PROPERTIES
   - sink/float
   - open/shut
   - hot/melt
-- should each map have its own block legend, or the ability to override a default legend?
-  - would make it easier to read maps inline
-  - tbh should probably abstract map creation somewhat, it'd be nice to build with blocks directly instead of being limited by strings
+- be able to destroy player icon on touch of defeat block
 - edge case: what happens to the rock if the player moves up here? (reduced case, assume blank space in all directions)
   - ```
     _RrP_

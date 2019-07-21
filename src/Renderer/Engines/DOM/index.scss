@@ -1,0 +1,32 @@
+$block-size: 20px;
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.row {
+  display: flex;
+}
+
+.block {
+  width: $block-size;
+  height: $block-size;
+  background-color: #ccc;
+
+  &-noun {
+    background-color: red;
+  }
+
+  &-joiner {
+    background-color: blue;
+  }
+
+  &-property {
+    background-color: green;
+  }
+
+  &-icon {
+    background-color: yellow;
+  }
+}
