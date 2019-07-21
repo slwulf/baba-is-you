@@ -29,9 +29,11 @@ const blocks = {
   }
 }
 
+const SELECTOR = '#dom-string pre'
+
 export default class DOMString extends EngineBase {
   beforeRender() {
-    document.querySelector('#game pre').textContent = ''
+    document.querySelector(SELECTOR).textContent = ''
   }
 
   renderBlock(block) {
@@ -57,12 +59,12 @@ export default class DOMString extends EngineBase {
   }
 
   renderGrid(grid) {
-    var pre = document.querySelector('#game pre')
+    var pre = document.querySelector(SELECTOR)
     pre.textContent = grid
   }
 
   renderWinScreen() {
-    var pre = document.querySelector('#game pre')
+    var pre = document.querySelector(SELECTOR)
     pre.textContent = 'Congratulations!'
   }
 }

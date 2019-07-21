@@ -12,6 +12,10 @@ export default class EngineBase {
     )
   }
 
+  beforeRender() {
+    return null
+  }
+
   renderBlock(block) {
     return null
   }
