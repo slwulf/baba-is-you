@@ -3,7 +3,7 @@ import {LEGEND} from './Constants.js'
 
 export default function History() {
   const commits = []
-  let blocksCoveredByMovedIcons = []
+  let coveredBlocks = []
   let legend = LEGEND
 
   return {
@@ -20,33 +20,37 @@ export default function History() {
     },
 
     applyChanges(diff) {
-      var coveredBlocks = []
       var last = Util.splitMapString(this.last)
       var newState = diff.reduce((state, delta) => {
         var fromBlock = state[delta.from.x][delta.from.y]
         var toBlock = state[delta.to.x][delta.to.y]
 
         if (!delta.to.destroyed) {
-          coveredBlocks.push({
+          this.coverBlock({
             x: delta.to.x,
             y: delta.to.y,
             char: toBlock
           })
         }
 
-        var prevFrom = this.getPrevBlock(delta.from)
-        var prevTo = this.getPrevBlock(delta.to)
-
         state[delta.to.x][delta.to.y] = this.getNewTo(delta, fromBlock, toBlock)
         state[delta.from.x][delta.from.y] = this.getNewFrom(delta, fromBlock, toBlock)
+
         return state;
       }, last)
 
       this.push(
         newState.map(l => l.join('')).join('\n')
       )
-      // TODO: merge these arrays so that still-covered blocks stay covered
-      blocksCoveredByMovedIcons = coveredBlocks
+    },
+
+    coverBlock(block) {
+      if (
+        block.char !== this.BLANK &&
+        !Util.arrayContainsObject(coveredBlocks, block)
+      ) {
+        coveredBlocks.push(block)
+      }
     },
 
     getNewFrom(delta, fromBlock, toBlock) {
@@ -54,17 +58,26 @@ export default function History() {
     },
 
     getNewTo(delta, fromBlock, toBlock) {
+      if (delta.to.destroyed) {
+        return this.getPrevBlock(delta.to) || this.BLANK
+      }
+
       return delta.from.destroyed ? toBlock : fromBlock
     },
 
     getPrevBlock({x, y}) {
-      return blocksCoveredByMovedIcons.reduce((res, block) => {
-        if (block.x === x && block.y === y) {
-          return block.char
-        }
+      var index = coveredBlocks.findIndex(block => {
+        return block.x === x && block.y === y
+      })
 
-        return res
-      }, null)
+      // if we're looking up a prev block, and one exists
+      // it's no longer covered
+      if (index > -1) {
+        let [prev] = coveredBlocks.splice(index, 1)
+        return prev.char
+      }
+
+      return null
     },
 
     get last() {
