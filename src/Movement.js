@@ -49,11 +49,16 @@ export default class Movement {
         !canMoveLastBlock
       ) return false
 
+      if (lastBlockInChain.isSink() || toBlock.isSink()) {
+        move.from.destroyed = true
+        move.to.destroyed = true
+      }
+
       if (lastBlockInChain.isSteppable() || toBlock.isSteppable()) return move
 
       if (chainLength < queue.length) return move
 
-      if (toBlock && toBlock.isMovable()) {
+      if (toBlock.isMovable()) {
         var nextMove = {
           from: toBlock.position,
           to: Util.getNextPosition(toBlock.position, direction)

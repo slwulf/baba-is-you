@@ -13,12 +13,23 @@ The goal of this project is to recreate the popular puzzle game [Baba Is You](ht
 #### TODO
 - break up DOM render scss
 - render block effects (win, float, colors, etc)
+- be able to deploy compiled src to gh pages
 - MOAR ICONS
 - MOAR PROPERTIES
   - sink/float
   - open/shut
   - hot/melt
 - be able to destroy player icon on touch of defeat block
+- baba is us (baba with websockets)
+  - client sends player input to server
+  - server applies input to current game state
+  - server broadcasts current game state (or a stream of changes?) out to clients
+  - clients render loop state/changes from server
+  - server also has to manage connections and prevent level instances from having too many players at once
+  - need a way to define different YOUs - usernames become text blocks?
+  - also need to adjust map creation to account for spawn points of 4 blocks (username text, is, you, and user icon)
+  - in-level chat would probably be helpful as well
+  - level is not "won" until all players are on a win block
 - edge case: what happens to the rock if the player moves up here? (reduced case, assume blank space in all directions)
   - ```
     _RrP_
