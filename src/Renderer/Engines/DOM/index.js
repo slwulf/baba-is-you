@@ -32,7 +32,7 @@ export default class DOM extends EngineBase {
   renderBlock(block) {
     var type = block.type.toLowerCase()
     var name = block.name.toLowerCase()
-    return `<div class="block block-${type} block-${type}-${name}"></div>`
+    return `<div class="block block-${type} block-${type}--${name}"></div>`
   }
 
   renderGrid() {

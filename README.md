@@ -9,7 +9,7 @@ This repo is a fun solo project with the goal of recreating the popular puzzle g
 - Use arrow keys for movement, `z` to undo, and `x` to reset
 
 #### TODO
-- render distinct blocks in DOM engine
+- break up DOM render scss
 - MOAR ICONS
 - MOAR PROPERTIES
   - sink/float
