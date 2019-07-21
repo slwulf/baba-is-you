@@ -30,9 +30,19 @@ export default class DOM extends EngineBase {
   }
 
   renderBlock(block) {
+    return `<div class="${this.getBlockClasses(block)}"></div>`
+  }
+
+  getBlockClasses(block) {
     var type = block.type.toLowerCase()
     var name = block.name.toLowerCase()
-    return `<div class="block block-${type} block-${type}--${name}"></div>`
+    var classes = [
+      'block',
+      `block-${type}`,
+      `block-${type}--${name}`,
+      block.isWin() && 'block--is_win'
+    ]
+    return classes.filter(Boolean).join(' ')
   }
 
   renderGrid() {

@@ -1,12 +1,18 @@
-@mixin block-content($name, $content, $color: false) {
+@mixin block-content($name, $content, $color: false, $placement: after) {
   &--#{$name} {
-    @content;
+    @if $placement == after {
+      @content;
+    }
 
-    &:after {
+    &:#{$placement} {
       content: $content;
       @if $color {
         color: transparent;
         text-shadow: 0 0 0 $color;
+      }
+
+      @if $placement == before {
+        @content;
       }
     }
   }
