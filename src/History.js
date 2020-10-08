@@ -39,9 +39,26 @@ export default function History() {
         return state;
       }, last)
 
-      this.push(
-        newState.map(l => l.join('')).join('\n')
-      )
+      // Create a new map.
+      var newMap = newState.map(l => l.join('')).join('\n')
+      // Get rules which will transform blocks.
+      var rules = Util.getRulesForMap(newMap, this.legend)
+      var transformRules = rules.filter( rule => rule.hasNounProperty() )
+      var transformedMap = transformRules.reduce((map, rule) => {
+        // For now transforming one block into two is not supported.
+        var prop = rule.nounProperties()[0]
+        var propBlockCode = Util.getKeyForValue(this.legend, val => {
+          return val === prop.iconBlock()
+        })
+        var target = rule.target
+        var targetBlockCode = Util.getKeyForValue(this.legend, val => {
+          return val === target.iconBlock()
+        })
+        return map.replaceAll(targetBlockCode, propBlockCode)
+      }, newMap)
+      console.log(transformedMap)
+
+      this.push(transformedMap)
     },
 
     coverBlock(block) {

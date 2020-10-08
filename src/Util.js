@@ -2,7 +2,7 @@ import Rule from './Rule.js'
 import {LEGEND, EFFECTS, INPUTS} from './Constants.js'
 
 export default {
-  getObjectsForMap(mapStr = '', legend = LEGEND) {
+  createObjectGrid(mapStr = '', legend = LEGEND) {
     var grid = this.splitMapString(mapStr)
       .map((row, i) => row.map((char, j) => {
         var Block = legend[char]
@@ -11,15 +11,26 @@ export default {
         }
         return new Block(i, j)
       }))
-
+    return grid;
+  },
+  getObjectsForMap(mapStr = '', legend = LEGEND) {
+    var grid = this.createObjectGrid(mapStr, legend)
     var rules = this.getDefinedRules(grid)
     return grid.map(row => row.map(block => this.applyRules(block, rules)))
+  },
+  getRulesForMap(mapStr = '', legend = LEGEND) {
+    var grid = this.createObjectGrid(mapStr, legend)
+    return this.getDefinedRules(grid)
   },
   applyRules(block, rules) {
     if (!block.isIcon()) return block
     rules.forEach(rule => {
       if (block.name === rule.target.name) {
-        rule.properties.forEach(p => block.addProperty(p))
+        rule.properties.forEach(p => {
+          if(p.isProperty()) {
+            block.addProperty(p)
+          }
+        })
       }
     })
     return block
@@ -73,26 +84,62 @@ export default {
       ? Math.abs(pos1.x - pos2.x)
       : Math.abs(pos1.y - pos2.y)
   },
-  sortMoves(moves) {
+  sortMoves(moves, direction) {
     var sorted = moves.sort((move1, move2) => {
-      if (
-        move1.from.x === move2.to.x ||
-        move1.from.y === move2.to.y
-      ) return 1
-
-      if (
-        move1.to.x === move2.from.x ||
-        move1.to.y === move2.from.y
-      ) return -1
-
+      switch (direction) {
+        // Sort left to right.
+        case INPUTS.LEFT:
+          if (
+            move1.from.x < move2.from.x ||
+            ((move1.from.x === move2.from.x) &&
+            move1.from.y < move2.from.y)
+          ) return -1
+          if (
+            move1.from.x < move2.from.x ||
+            ((move1.from.x === move2.from.x) &&
+            move1.from.y > move2.from.y)
+          ) return 1
+        // Sort right to left.
+        case INPUTS.RIGHT:
+          if (
+            move1.from.x < move2.from.x ||
+            ((move1.from.x === move2.from.x) &&
+            move1.from.y > move2.from.y)
+          ) return -1
+          if (
+            move1.from.x < move2.from.x ||
+            ((move1.from.x === move2.from.x) &&
+            move1.from.y < move2.from.y)
+          ) return 1
+        // Sort top to bottom.
+        case INPUTS.UP:
+          if (
+            move1.from.y < move2.from.y ||
+            ((move1.from.y === move2.from.y) &&
+            move1.from.x < move2.from.x)
+          ) return -1
+          if (
+            move1.from.y > move2.from.y ||
+            ((move1.from.y === move2.from.y) &&
+            move1.from.x > move2.from.x)
+          ) return 1
+        // Sort bottom to top.
+        case INPUTS.DOWN:
+          if (
+            move1.from.y < move2.from.y ||
+            ((move1.from.y === move2.from.y) &&
+            move1.from.x > move2.from.x)
+          ) return -1
+          if (
+            move1.from.y > move2.from.y ||
+            ((move1.from.y === move2.from.y) &&
+            move1.from.x < move2.from.x)
+          ) return 1
+      }
       return 0
     })
+    return sorted
 
-    // idk why but consistently the first position should be the last
-    if (sorted.length > 1) sorted.push(sorted.splice(0, 1)[0])
-
-    // reversing them ensures they get applied as state changes in the correct order
-    return sorted.reverse()
   },
   deduplicateMoves(moves) {
     var deduped = []

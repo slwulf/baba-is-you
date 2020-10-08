@@ -13,6 +13,14 @@ export default class Rule {
   hasProperty(propertyName) {
     return this.properties.some(p => p.name === propertyName)
   }
+
+  hasNounProperty() {
+    return this.properties.some( p => p.isNoun() )
+  }
+
+  nounProperties() {
+    return this.properties.filter( p => p.isNoun() )
+  }
 }
 
 Rule.fromArray = function(blocks) {
