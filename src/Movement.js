@@ -10,7 +10,7 @@ export default class Movement {
     return Util.sortMoves(
       Util.deduplicateMoves(
         this.walkMoves(playerMoves, direction)
-      )
+      ), direction
     )
   }
 
