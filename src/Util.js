@@ -19,7 +19,11 @@ export default {
     if (!block.isIcon()) return block
     rules.forEach(rule => {
       if (block.name === rule.target.name) {
-        rule.properties.forEach(p => block.addProperty(p))
+        rule.properties.forEach(p => {
+          if(p.isProperty()) {
+            block.addProperty(p)
+          }
+        })
       }
     })
     return block
