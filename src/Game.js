@@ -46,6 +46,7 @@ export default class Game {
       this.showWinAnimation().then(() => {
         // TODO: handle reaching the end of levels array
         this.setInitialState(this.state.currentLevel.toInt() + 1)
+        this.renderFrame()
       })
     }
 
@@ -70,8 +71,10 @@ export default class Game {
   }
 
   showWinAnimation() {
-    return Util.pauseForAction(250, () => this.state.isWin = true)
-      .then(() => Util.pauseForAction(2500, () => this.state.isWin = false))
+    return Util.pauseForAction(250, () => {
+      this.state.isWin = true
+      this.renderFrame()
+    }).then(() => Util.pauseForAction(2500, () => this.state.isWin = false))
   }
 
   render() {
@@ -92,13 +95,17 @@ export default class Game {
     this.renderer.renderFrameSync()
   }
 
-  start() {
-    var render = () => {
-      this.render()
-      requestAnimationFrame(render)
+  renderFrame() {
+    // The render functions needs to be wrapped,
+    // so that it can access the state of this.
+    var wrappedRender = () => {
+       this.render()
     }
+    requestAnimationFrame(wrappedRender)
+  }
 
-    requestAnimationFrame(render)
+  start() {
+    this.renderFrame()
   }
 
   setKeyBindings(bind) {
@@ -112,6 +119,8 @@ export default class Game {
       } else if (input === INPUTS.RESET) {
         this.reset()
       }
+      // Render the new state.
+      this.renderFrame()
     }, INPUTS)
   }
 }
