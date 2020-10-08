@@ -1,9 +1,6 @@
 import {EFFECTS, TYPES} from '../Constants.js'
 
 export default class Base {
-  get name() {
-    return this.constructor.name
-  }
 
   constructor(x = -1, y = -1) {
     this.position = {x,y}
