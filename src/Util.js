@@ -2,7 +2,7 @@ import Rule from './Rule.js'
 import {LEGEND, EFFECTS, INPUTS} from './Constants.js'
 
 export default {
-  getObjectsForMap(mapStr = '', legend = LEGEND) {
+  createObjectGrid(mapStr = '', legend = LEGEND) {
     var grid = this.splitMapString(mapStr)
       .map((row, i) => row.map((char, j) => {
         var Block = legend[char]
@@ -11,9 +11,16 @@ export default {
         }
         return new Block(i, j)
       }))
-
+    return grid;
+  },
+  getObjectsForMap(mapStr = '', legend = LEGEND) {
+    var grid = this.createObjectGrid(mapStr, legend)
     var rules = this.getDefinedRules(grid)
     return grid.map(row => row.map(block => this.applyRules(block, rules)))
+  },
+  getRulesForMap(mapStr = '', legend = LEGEND) {
+    var grid = this.createObjectGrid(mapStr, legend)
+    return this.getDefinedRules(grid)
   },
   applyRules(block, rules) {
     if (!block.isIcon()) return block
