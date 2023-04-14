@@ -29,7 +29,9 @@ export const EFFECTS = {
   YOU: 'you',
   WIN: 'win',
   DEFEAT: 'defeat',
-  SINK: 'sink'
+  SINK: 'sink',
+  HOT: 'hot',
+  MELT: 'melt'
 }
 
 export const TYPES = {
