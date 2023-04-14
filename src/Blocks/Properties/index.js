@@ -54,4 +54,16 @@ class Sink extends PropertyBase {
   }
 }
 
-export default {You, Stop, Push, Win, Defeat, Sink}
+class Hot extends PropertyBase {
+  setEffects() {
+    this.setEffect(EFFECTS.HOT, true)
+  }
+}
+
+class Melt extends PropertyBase {
+  setEffects() {
+    this.setEffect(EFFECTS.MELT, true)
+  }
+}
+
+export default {You, Stop, Push, Win, Defeat, Sink, Hot, Melt}

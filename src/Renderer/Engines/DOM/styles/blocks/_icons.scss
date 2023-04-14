@@ -10,5 +10,6 @@
   @include block-content(flag, '🏳', $gold);
   @include block-content(wall, '⬛️', $light-gray);
   @include block-content(water, '⬛️', $blue);
+  @include block-content(lava, '⬛️', $orange);
   @include block-content(skull, '💀', $red);
 }
