@@ -31,6 +31,11 @@ export default class Base {
     this.type = type
   }
 
+  destroy() {
+    this.type = TYPES.BLANK
+    this.properties = []
+  }
+
   isSolid() {
     return this.isWord() || this.hasProperty(EFFECTS.SOLID)
   }
@@ -61,6 +66,14 @@ export default class Base {
     return this.hasProperty(EFFECTS.SINK)
   }
 
+  isMelt() {
+    return this.hasProperty(EFFECTS.MELT)
+  }
+
+  isHot() {
+    return this.hasProperty(EFFECTS.HOT)
+  }
+
   isBlank() {
     return this.type === TYPES.BLANK
   }
@@ -83,5 +96,9 @@ export default class Base {
 
   isWord() {
     return this.isNoun() || this.isJoiner() || this.isProperty()
+  }
+
+  shouldBeDestroyed() {
+    return this.isHot() && this.isMelt()
   }
 }

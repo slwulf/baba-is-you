@@ -22,6 +22,7 @@ export default {
         rule.properties.forEach(p => block.addProperty(p))
       }
     })
+    if (block.shouldBeDestroyed()) block.destroy()
     return block
   },
   playerIsDefined(rules) {

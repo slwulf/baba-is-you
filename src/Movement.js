@@ -53,6 +53,10 @@ export default class Movement {
         move.to.destroyed = true
       }
 
+      if (fromBlock.isMelt() && toBlock.isHot()) {
+        move.from.destroyed = true
+      }
+
       if (fromBlock.isYou() && toBlock.isDefeat()) {
         move.from.destroyed = true
       }
