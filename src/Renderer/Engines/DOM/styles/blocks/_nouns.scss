@@ -26,4 +26,8 @@
   @include block-content(skull, newline('SK','ULL')) {
     color: $red;
   };
+
+  @include block-content(lava, newline('LA','VA')) {
+    color: $orange;
+  };
 }
